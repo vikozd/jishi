@@ -1,0 +1,57 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_green" >
+
+    <RelativeLayout
+        android:id="@+id/relative3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white_g" >
+
+        <TextView
+            android:id="@+id/tv_bodypart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:padding="11dp"
+            android:text="人体部位"
+            android:textColor="@color/gray_red"
+            android:textSize="17sp" />
+
+        <Button
+            android:id="@+id/bnt_back"
+            android:layout_width="35dp"
+            android:layout_height="21dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/back_change" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.3dp"
+        android:layout_below="@+id/relative3"
+        android:background="@color/gray" />
+
+    <ScrollView
+        android:layout_marginTop="3dp"
+        android:id="@+id/scrollView1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/relative3"
+        android:fillViewport="true" >
+
+        <GridView
+            android:id="@+id/gv_bodypart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:horizontalSpacing="2dp"
+            android:numColumns="2"
+            android:verticalSpacing="2dp" >
+        </GridView>
+    </ScrollView>
+
+</RelativeLayout>

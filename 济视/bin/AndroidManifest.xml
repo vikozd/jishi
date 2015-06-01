@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.zhangdong.JiShi"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="11"
+        android:targetSdkVersion="17" />
+
+    <!-- 获取当前wifi状态 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <!-- 蓝牙分享所需的权限 -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
+    <application
+        android:name="com.zhangdong.JiShi.Tools.SpeechApp"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="com.mob.tools.MobUIShell"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustResize" >
+            <intent-filter>
+                <data android:scheme="tencent100371282" />
+
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <!-- 微信分享回调 -->
+        <activity
+            android:name="cn.sharesdk.demo.wxapi.WXEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name="com.zhangdong.JiShi.LoadActivity"
+            android:label="@string/app_name"
+           android:screenOrientation="portrait"
+            android:launchMode="singleTask" >
+        </activity>
+        <activity
+            android:name="com.zhangdong.JiShi.GridViewActivity"
+            android:label="@string/title_activity_grid_view"
+           android:screenOrientation="portrait"
+            android:launchMode="singleTask" >
+        </activity>
+        <activity
+            android:name="com.zhangdong.JiShi.VideoMainActivity"
+            android:label="@string/title_activity_video"
+            android:launchMode="singleTask"
+           android:screenOrientation="landscape" >
+        </activity>
+        <activity
+            android:name="com.zhangdong.JiShi.BodyActivity"
+            android:label="@string/app_name"
+           android:screenOrientation="portrait"
+            android:launchMode="singleTask" >
+        </activity>
+        <activity
+            android:name="com.zhangdong.JiShi.BackOfBodyActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTask" >
+        </activity>
+        <activity
+            android:name="com.zhangdong.JiShi.GuideActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.zhangdong.JiShi.IndexActivity"
+            android:label="@string/title_activity_index"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden" >
+        </activity>
+        <!-- 移动统计分析 -->
+        <meta-data
+            android:name="IFLYTEK_APPKEY"
+            android:value="54fe8cef" />
+        <meta-data
+            android:name="IFLYTEK_CHANNEL"
+            android:value="Android_Demo" />
+
+        <activity
+            android:name="com.zhangdong.JiShi.SearchActivity"
+            android:label="@string/title_activity_search"
+           android:screenOrientation="portrait"
+            android:launchMode="singleTask" >
+        </activity>
+        <activity
+            android:name="com.zhangdong.JiShi.MainActivity"
+            android:label="@string/title_activity_main"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden" >
+        </activity>
+        <activity
+            android:name="com.zhangdong.JiShi.LoginActivity"
+            android:label="@string/title_activity_login"
+             android:exported="true"
+             android:screenOrientation="portrait"
+            android:launchMode="singleTask" >
+        </activity>
+        <activity
+            android:name="com.zhangdong.JiShi.VideoActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_video"
+            android:launchMode="singleTask" >
+        </activity>
+        <activity
+            android:name="com.zhangdong.JiShi.RegistActivity"
+            android:label="@string/title_activity_regist"
+           android:screenOrientation="portrait"
+            android:launchMode="singleTask" >
+        </activity>
+        <activity
+            android:name="com.zhangdong.JiShi.RegistSuccessActivity"
+            android:label="@string/title_activity_regist_success"
+           android:screenOrientation="portrait"
+            android:launchMode="singleTask" >
+        </activity>
+        <activity
+            android:name="com.zhangdong.JiShi.SeeHistoryActivity"
+            android:label="@string/title_activity_see_history"
+           android:screenOrientation="portrait"
+            android:launchMode="singleTask" >
+        </activity>
+        <activity
+            android:name="com.zhangdong.JiShi.MyFavoritesActivity"
+            android:label="@string/title_activity_my_favorites"
+           android:screenOrientation="portrait"
+            android:launchMode="singleTask" >
+        </activity>
+        <activity
+            android:name="com.zhangdong.JiShi.MyCenterActivity"
+            android:label="@string/title_activity_my_center"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask" >
+        </activity>
+        <activity
+            android:name="com.zhangdong.JiShi.OutofLoginActivity"
+            android:label="@string/title_activity_outof_login"
+            android:launchMode="singleTask" >
+        </activity>
+        <activity
+            android:name="com.zhangdong.JiShi.wxapi.WXEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" 
+             >
+        </activity>
+    </application>
+
+</manifest>

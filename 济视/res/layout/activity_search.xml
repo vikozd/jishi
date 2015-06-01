@@ -1,0 +1,89 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".SearchActivity" >
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+       
+        android:background="@color/light_green"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/bnt_back"
+            android:layout_width="40dp"
+            android:layout_height="20dp"
+            android:layout_weight="1"
+            
+            android:layout_marginLeft="7dp"
+            android:background="@drawable/back" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="5dp"
+            
+            android:layout_marginTop="5dp"
+            android:layout_weight="5"
+            
+            android:orientation="horizontal" >
+
+            <EditText
+                android:id="@+id/et_inputInSearch"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/ssbiankuang"
+                android:hint="请输入要搜索的内容"
+                android:padding="8dp"
+                android:imeOptions="actionDone" 
+                android:singleLine="true"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/bnt_quxiaoInSearch"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/quxiao" />
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/bnt_searchInSearch"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:textSize="16sp"
+            android:text="搜索"
+            android:textColor="@color/red"
+            />
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/lv_listviewInSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+         >
+    </ListView>
+    
+    <Button
+        android:id="@+id/bnt_clearsearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="清空历史记录"
+        android:background="@color/light_green1"
+        android:padding="10dp"
+        android:textSize="16sp"
+        android:textColor="@color/red"
+        />
+
+</LinearLayout>

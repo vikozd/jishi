@@ -1,0 +1,84 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:sp="http://schemas.android.com/apk/res/com.zhangdong.JiShi"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical"
+    tools:context=".SeeHistoryActivity" >
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white_g" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:padding="11dp"
+            android:text="播放记录"
+            android:textColor="@color/gray_red"
+            android:textSize="17sp" />
+
+        <Button
+            android:id="@+id/bnt_back"
+            android:layout_width="35dp"
+            android:layout_height="21dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="14dp"
+            android:background="@drawable/back_change" />
+        
+        
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="@color/gray" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1" >
+
+        <com.zhangdong.JiShi.Tools.SwipeListView
+            android:id="@+id/lv_history"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="#dddbdb"
+            android:dividerHeight="1dp"
+            
+            sp:right_width="90dp" >
+        </com.zhangdong.JiShi.Tools.SwipeListView>
+       
+    </FrameLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.05dp"
+        android:background="@color/gray" />
+
+    <RelativeLayout
+        android:id="@+id/rl_clear"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="bottom"
+        android:background="@drawable/rl_change" >
+
+        <TextView
+            android:id="@+id/tv_clear"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            
+            android:gravity="center"
+            android:text="  清 空"
+            android:textColor="@color/gray_red"
+            android:textSize="15sp" />
+    </RelativeLayout>
+
+</LinearLayout>

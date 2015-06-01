@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="gone" >
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:padding="3dp"
+        android:src="@drawable/point" />
+
+    <FrameLayout
+        android:id="@+id/frameLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/imageView2"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp" >
+
+        <LinearLayout
+            android:id="@+id/linear1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/talk"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="center_vertical" >
+
+            <EditText
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:background="@null"
+                android:hint="无内容"
+                android:gravity="center_vertical"
+                android:padding="5dp"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linear2"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@drawable/talk"
+            android:gravity="center" >
+
+            <RelativeLayout
+                android:id="@+id/show"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" >
+
+                <ImageView
+                    android:id="@+id/imageView1"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_centerHorizontal="true"
+                    android:background="@anim/frame"
+                    android:scaleType="fitXY"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/imageView1"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="5dp"
+                    android:text="录入中..."
+                    android:textSize="20sp"
+                    android:visibility="gone" />
+            </RelativeLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/frameLayout1"
+        android:layout_marginLeft="15dp"
+        android:text="轻触以编辑"
+        android:textColor="@color/light_gray"
+        android:textSize="15sp" />
+
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/textView4"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="15dp"
+        android:src="@drawable/doctor"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/imageView7"
+        android:layout_marginLeft="50dp"
+        android:textColor="@color/black"
+        android:layout_marginRight="30dp"
+        android:textSize="20sp" />
+
+</RelativeLayout>
