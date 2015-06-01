@@ -31,15 +31,20 @@
             android:background="@drawable/talk"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:gravity="center_vertical" >
+            android:gravity="center_vertical"
+            >
 
             <EditText
                 android:id="@+id/textView1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
                 android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="15dp"
                 android:background="@null"
                 android:hint="无内容"
+                android:maxLines="2"
                 android:gravity="center_vertical"
                 android:padding="5dp"
                 android:textColor="@color/black"

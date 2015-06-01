@@ -18,6 +18,8 @@ import net.tsz.afinal.http.AjaxCallBack;
 import net.tsz.afinal.http.AjaxParams;
 import android.os.Bundle;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -25,6 +27,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class RegistActivity extends FinalActivity {
+	private SharedPreferences sp;
+	private Editor editor;
 	private FinalHttp http;
 	private String uLoginID;
 	private String uPassword;
@@ -58,7 +62,7 @@ public class RegistActivity extends FinalActivity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_regist);
-
+		sp = this.getSharedPreferences("userinfo",MODE_PRIVATE);
 		http=new FinalHttp();
 		et_uloginname.setFocusable(true);
 	}
@@ -142,6 +146,11 @@ public class RegistActivity extends FinalActivity {
 						e.printStackTrace();
 					}
 					if(ErrorDesc!=null&&!"".equals(ErrorDesc)&&ErrorDesc.equals("成功")){
+						
+						editor = sp.edit();
+						editor.putString("loginname", uLoginID);
+						editor.putString("loginpass", uPassword);
+						editor.commit();
 						Toast.makeText(getApplicationContext(), "注册成功", Toast.LENGTH_SHORT).show();
 						Intent intent=new Intent();
 						intent.setClass(getApplicationContext(), RegistSuccessActivity.class);		

@@ -23,7 +23,7 @@ public class RegistSuccessActivity extends Activity {
 				try {
 					Thread.sleep(1500);
 					Intent intent=new Intent();
-					intent.setClass(getApplicationContext(), LoginActivity.class);
+					intent.setClass(getApplicationContext(), MainActivity.class);
 					startActivity(intent);
 					finish();
 				} catch (InterruptedException e) {
