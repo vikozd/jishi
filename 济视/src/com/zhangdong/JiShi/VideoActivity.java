@@ -71,12 +71,11 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
-
 import android.widget.Toast;
 
 public class VideoActivity extends FragmentActivity implements
-com.zhangdong.JiShi.Tools.VerticalSeekBar.OnSeekBarChangeListener,
-OnScrollListener, OnClickListener,PlayOther {
+		com.zhangdong.JiShi.Tools.VerticalSeekBar.OnSeekBarChangeListener,
+		OnScrollListener, OnClickListener, PlayOther {
 	private Animation animation;
 	private ImageView bt; // 用于开始和暂停的按钮
 	private SurfaceView pView; // 绘图容器对象，用于把视频显示在屏幕上
@@ -84,25 +83,25 @@ OnScrollListener, OnClickListener,PlayOther {
 	private MediaPlayer mediaPlayer; // 播放器控件
 	private int postSize; // 保存义播视频位子
 	private SeekBar seekbar; // 进度条控件
-	private  boolean flag = false; // 用于判断视频是否在播放中
-	private LinearLayout ll, ll0,lltag;
+	private boolean flag = false; // 用于判断视频是否在播放中
+	private LinearLayout ll, ll0, lltag;
 	private boolean display; // 用于是否显示其他按钮
 	private ProgressBar pb; // ProgressBar
 	private upDateSeekBar update; // 更新进度条用
-	private ImageView imageView1,iv_back;// 放大缩小
+	private ImageView imageView1, iv_back;// 放大缩小
 	private boolean b;// 竖false;横true
 	private TextView time, title, nowtime, viewtitle, viewdetail, playnum,
-	zannum;
-	private LinearLayout ll2,ll_top;
+			zannum;
+	private LinearLayout ll2, ll_top;
 	Map<String, Object> m, m2;
 	List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-	private PopupWindow mPopupWindow;
 	VerticalSeekBar soundBar;
 	private TextView soundvalues;
 	private AudioManager audiomanage;
 	private int maxVolume;
 	private int currentVolume;
-	private TextView text1, text2, text3, text4, text5, text6, text7, text8,tv_one;
+	private TextView text1, text2, text3, text4, text5, text6, text7, text8,
+			tv_one;
 	private MyScrollView myScrollView;
 	private LinearLayout mtitleLayout;
 	private LinearLayout mTopBtltleLayout;
@@ -110,20 +109,21 @@ OnScrollListener, OnClickListener,PlayOther {
 	Frag2 fg2;
 	Frag3 fg3;
 	Frag4 fg4;
-	TextView[] texts = new TextView[8];
+	// TextView[] texts = new TextView[8];
+	TextView[] texts = new TextView[6];
 	List<Video> listVideo, listVideo1, listVideo2, listVideo3, listVideo4;
 	private SharedPreferences sp;
 	private String loginname;
 	private String VID;
 
-	private ImageView shoucang,shoucang2,zanzan,zhuanfa,zhuanfa2;
+	private ImageView shoucang, shoucang2, zanzan, zhuanfa, zhuanfa2;
 	boolean blsc;// false未被收藏
 	private Video video;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-//		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		// requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN); // 全屏
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); // 应用运行时，保持屏幕高亮，不锁屏
@@ -132,10 +132,9 @@ OnScrollListener, OnClickListener,PlayOther {
 		setListener(); // 绑定相关事件
 
 	}
-	
-	
-	
-	int width,height;
+
+	int width, height;
+
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
@@ -143,90 +142,97 @@ OnScrollListener, OnClickListener,PlayOther {
 		sp = getSharedPreferences("userinfo", MODE_PRIVATE);
 		loginname = sp.getString("loginname", "");
 		WindowManager wm = this.getWindowManager();
-
 		if (width <= 0) {
 			if (VideoActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
 				height = wm.getDefaultDisplay().getWidth();
 				width = wm.getDefaultDisplay().getHeight();
-				
-				LayoutParams layoutParams= ll2.getLayoutParams();
-				layoutParams.width=height;
-				layoutParams.height=width;
+
+				LayoutParams layoutParams = ll2.getLayoutParams();
+				layoutParams.width = height;
+				layoutParams.height = width;
 				ll2.setLayoutParams(layoutParams);
 			} else {
 
 				width = wm.getDefaultDisplay().getWidth();
 				height = wm.getDefaultDisplay().getHeight();
 			}
-			
+
 		}
-
-
 
 	}
-	
+
 	// 横屏竖屏
 
-		@Override
-		public void onConfigurationChanged(Configuration newConfig) {
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
 
-			super.onConfigurationChanged(newConfig);
-			// 检测屏幕的方向：纵向或横向
-	  
-			// TODO Auto-generated method stub
-			if (VideoActivity.this.getResources().getConfiguration().orientation
+		super.onConfigurationChanged(newConfig);
+		// 检测屏幕的方向：纵向或横向
 
-			== Configuration.ORIENTATION_LANDSCAPE) {
-				// 当前为横屏， 在此处添加额外的处理代码
-				ViewGroup.LayoutParams lp = ll2.getLayoutParams();
-				lp.width=height;
-				lp.height = width;
-				ll2.setLayoutParams(lp);
-				imageView1.setImageResource(R.drawable.minscreen);
-				display = true;
-				b = true;
+		// TODO Auto-generated method stub
+		if (VideoActivity.this.getResources().getConfiguration().orientation
 
-			}
-
-			else if (VideoActivity.this.getResources().getConfiguration().orientation
-
-			== Configuration.ORIENTATION_PORTRAIT) {
-
-				// 当前为竖屏， 在此处添加额外的处理代码
-
-				ViewGroup.LayoutParams lp = ll2.getLayoutParams();
-				lp.width=width;
-				lp.height =DipToPixels(this,250);;
-				ll2.setLayoutParams(lp);
-				display = true;
-				imageView1.setImageResource(R.drawable.maxscreen);
-				b = false;
-
-			}
-
-			new Handler().postDelayed(new Runnable() {
-
-				@Override
-				public void run() {
-					getwiandHeiht();
-				}
-			}, 100);
+		== Configuration.ORIENTATION_LANDSCAPE) {
+			// 当前为横屏， 在此处添加额外的处理代码
+			ViewGroup.LayoutParams lp = ll2.getLayoutParams();
+			lp.width = height;
+			lp.height = width;
+			ll2.setLayoutParams(lp);
+			imageView1.setImageResource(R.drawable.minscreen);
+			display = true;
+			b = true;
 
 		}
 
+		else if (VideoActivity.this.getResources().getConfiguration().orientation
+
+		== Configuration.ORIENTATION_PORTRAIT) {
+
+			// 当前为竖屏， 在此处添加额外的处理代码
+
+			ViewGroup.LayoutParams lp = ll2.getLayoutParams();
+			lp.width = width;
+			lp.height = DipToPixels(this, 250);
+			;
+			ll2.setLayoutParams(lp);
+			display = true;
+			imageView1.setImageResource(R.drawable.maxscreen);
+			b = false;
+
+		}
+
+		new Handler().postDelayed(new Runnable() {
+
+			@Override
+			public void run() {
+				getwiandHeiht();
+			}
+		}, 100);
+
+	}
 
 	@Override
 	public void onScroll(int scrollY) {
 		int mBuyLayout2ParentTop = Math.max(scrollY, mtitleLayout.getTop());
 		mTopBtltleLayout.layout(0, mBuyLayout2ParentTop,
 				mTopBtltleLayout.getWidth(), mBuyLayout2ParentTop
-				+ mTopBtltleLayout.getHeight());
+						+ mTopBtltleLayout.getHeight());
 	}
 
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
+		/*
+		 * case R.id.text1: select(0); switchFragment(1); break; case
+		 * R.id.text2: select(1); switchFragment(2); break; case R.id.text3:
+		 * select(2); switchFragment(3); break; case R.id.text4: select(3);
+		 * switchFragment(4); break; case R.id.text5: select(4);
+		 * switchFragment(1); break; case R.id.text6: select(5);
+		 * switchFragment(2); break; case R.id.text7: select(6);
+		 * switchFragment(3); break; case R.id.text8: select(7);
+		 * switchFragment(4); break;
+		 */
 		case R.id.text1:
 			select(0);
 			switchFragment(1);
@@ -239,25 +245,17 @@ OnScrollListener, OnClickListener,PlayOther {
 			select(2);
 			switchFragment(3);
 			break;
-		case R.id.text4:
-			select(3);
-			switchFragment(4);
-			break;
 		case R.id.text5:
-			select(4);
+			select(3);
 			switchFragment(1);
 			break;
 		case R.id.text6:
-			select(5);
+			select(4);
 			switchFragment(2);
 			break;
 		case R.id.text7:
-			select(6);
+			select(5);
 			switchFragment(3);
-			break;
-		case R.id.text8:
-			select(7);
-			switchFragment(4);
 			break;
 		case R.id.shoucang:
 			shoucang();
@@ -282,18 +280,36 @@ OnScrollListener, OnClickListener,PlayOther {
 
 	}
 
+	/*
+	 * public void select(int textId) { if (textId <= 3) { for (int i = 0; i <
+	 * texts.length; i++) {
+	 * texts[i].setTextColor(getResources().getColor(R.color.light_black));
+	 * texts[textId].setTextColor(getResources().getColor(R.color.red));
+	 * texts[textId + 4].setTextColor(getResources().getColor(R.color.red)); } }
+	 * else { for (int i = 0; i < texts.length; i++) {
+	 * texts[i].setTextColor(getResources().getColor(R.color.light_black));
+	 * texts[textId].setTextColor(getResources().getColor(R.color.red));
+	 * texts[textId - 4].setTextColor(getResources().getColor(R.color.red)); } }
+	 * }
+	 */
 	public void select(int textId) {
-		if (textId <= 3) {
+		if (textId <= 2) {
 			for (int i = 0; i < texts.length; i++) {
-				texts[i].setTextColor(getResources().getColor(R.color.light_black));
-				texts[textId].setTextColor(getResources().getColor(R.color.red));
-				texts[textId + 4].setTextColor(getResources().getColor(R.color.red));
+				texts[i].setTextColor(getResources().getColor(
+						R.color.light_black));
+				texts[textId]
+						.setTextColor(getResources().getColor(R.color.red));
+				texts[textId + 3].setTextColor(getResources().getColor(
+						R.color.red));
 			}
 		} else {
 			for (int i = 0; i < texts.length; i++) {
-				texts[i].setTextColor(getResources().getColor(R.color.light_black));
-				texts[textId].setTextColor(getResources().getColor(R.color.red));
-				texts[textId - 4].setTextColor(getResources().getColor(R.color.red));
+				texts[i].setTextColor(getResources().getColor(
+						R.color.light_black));
+				texts[textId]
+						.setTextColor(getResources().getColor(R.color.red));
+				texts[textId - 3].setTextColor(getResources().getColor(
+						R.color.red));
 			}
 		}
 	}
@@ -325,11 +341,12 @@ OnScrollListener, OnClickListener,PlayOther {
 		tran.commit();
 
 	}
+
 	// 初始化
 
 	@SuppressWarnings("deprecation")
 	private void init() {
-		
+
 		String videojson = getIntent().getStringExtra("videojson");
 		Gson g = new Gson();
 		listVideo = g.fromJson(videojson, new TypeToken<List<Video>>() {
@@ -354,15 +371,15 @@ OnScrollListener, OnClickListener,PlayOther {
 		ll = (LinearLayout) findViewById(R.id.ll);
 		ll0 = (LinearLayout) findViewById(R.id.ll0);
 		ll2 = (LinearLayout) findViewById(R.id.ll2);
-		lltag= (LinearLayout) findViewById(R.id.lltag);
-		ll_top=(LinearLayout) findViewById(R.id.ll_top);
+		lltag = (LinearLayout) findViewById(R.id.lltag);
+		ll_top = (LinearLayout) findViewById(R.id.ll_top);
 		pb = (ProgressBar) findViewById(R.id.pb);
 		imageView1 = (ImageView) findViewById(R.id.imageView1);
 		shoucang = (ImageView) findViewById(R.id.shoucang);
 		shoucang2 = (ImageView) findViewById(R.id.shoucang2);
-		zanzan= (ImageView) findViewById(R.id.zanzan);
-		zhuanfa= (ImageView) findViewById(R.id.zhuanfa);
-		zhuanfa2= (ImageView) findViewById(R.id.zhuanfa2);
+		zanzan = (ImageView) findViewById(R.id.zanzan);
+		zhuanfa = (ImageView) findViewById(R.id.zhuanfa);
+		zhuanfa2 = (ImageView) findViewById(R.id.zhuanfa2);
 		shoucang.setOnClickListener(this);
 		shoucang2.setOnClickListener(this);
 		zanzan.setOnClickListener(this);
@@ -370,8 +387,9 @@ OnScrollListener, OnClickListener,PlayOther {
 		zhuanfa2.setOnClickListener(this);
 		iv_back.setOnClickListener(this);
 		time = (TextView) findViewById(R.id.time);
-		tv_one=(TextView) findViewById(R.id.tv_one);
-		animation=AnimationUtils.loadAnimation(getApplicationContext(),R.anim.zanjiayi);
+		tv_one = (TextView) findViewById(R.id.tv_one);
+		animation = AnimationUtils.loadAnimation(getApplicationContext(),
+				R.anim.zanjiayi);
 		nowtime = (TextView) findViewById(R.id.nowtime);
 		title = (TextView) findViewById(R.id.title);
 		soundBar = (VerticalSeekBar) findViewById(R.id.sound); // 音量设置
@@ -392,24 +410,27 @@ OnScrollListener, OnClickListener,PlayOther {
 		text1 = (TextView) findViewById(R.id.text1);
 		text2 = (TextView) findViewById(R.id.text2);
 		text3 = (TextView) findViewById(R.id.text3);
-		text4 = (TextView) findViewById(R.id.text4);
+		// text4 = (TextView) findViewById(R.id.text4);
 		text5 = (TextView) findViewById(R.id.text5);
 		text6 = (TextView) findViewById(R.id.text6);
 		text7 = (TextView) findViewById(R.id.text7);
-		text8 = (TextView) findViewById(R.id.text8);
+		// text8 = (TextView) findViewById(R.id.text8);
 		viewdetail = (TextView) findViewById(R.id.viewdetail);
 		viewtitle = (TextView) findViewById(R.id.viewtitle);
 		zannum = (TextView) findViewById(R.id.zannum);
 		playnum = (TextView) findViewById(R.id.playnum);
+		/*
+		 * texts[0] = text1; texts[1] = text2; texts[2] = text3; texts[3] =
+		 * text4; texts[4] = text5; texts[5] = text6; texts[6] = text7; texts[6]
+		 * = text7; texts[7] = text8;
+		 */
 		texts[0] = text1;
 		texts[1] = text2;
 		texts[2] = text3;
-		texts[3] = text4;
-		texts[4] = text5;
-		texts[5] = text6;
-		texts[6] = text7;
-		texts[6] = text7;
-		texts[7] = text8;
+		texts[3] = text5;
+		texts[4] = text6;
+		texts[5] = text7;
+
 		for (int i = 0; i < texts.length; i++) {
 			texts[i].setOnClickListener(this);
 		}
@@ -440,14 +461,13 @@ OnScrollListener, OnClickListener,PlayOther {
 		switchFragment(1);
 		myScrollView.setOnScrollListener(this);
 		findViewById(R.id.parent_layout).getViewTreeObserver()
-		.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
-			@Override
-			public void onGlobalLayout() {
-				onScroll(myScrollView.getScrollY());
-				System.out.println(myScrollView.getScrollY());
-			}
-		});
-
+				.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+					@Override
+					public void onGlobalLayout() {
+						onScroll(myScrollView.getScrollY());
+						System.out.println(myScrollView.getScrollY());
+					}
+				});
 
 	}
 
@@ -491,9 +511,10 @@ OnScrollListener, OnClickListener,PlayOther {
 
 		@Override
 		public void onPrepared(MediaPlayer mp) {
-			Animation animation1=AnimationUtils.loadAnimation(getApplicationContext(), R.anim.out_to_top);
-			Animation animation2=AnimationUtils.loadAnimation(getApplicationContext(), R.anim.out_to_bottom);
-
+			Animation animation1 = AnimationUtils.loadAnimation(
+					getApplicationContext(), R.anim.out_to_top);
+			Animation animation2 = AnimationUtils.loadAnimation(
+					getApplicationContext(), R.anim.out_to_bottom);
 
 			pb.setVisibility(View.GONE); // 准备完成后，隐藏控件
 			bt.setVisibility(View.GONE);
@@ -505,7 +526,7 @@ OnScrollListener, OnClickListener,PlayOther {
 			display = false;
 			if (mediaPlayer != null) {
 				mediaPlayer.start(); // 开始播放视频
-				//seekbar.setMax(mediaPlayer.getDuration());
+				// seekbar.setMax(mediaPlayer.getDuration());
 				bt.setEnabled(true);
 				flag = true;
 				seekbar.setEnabled(true);
@@ -533,24 +554,24 @@ OnScrollListener, OnClickListener,PlayOther {
 				new PlayMovie(postSize, url).start();
 				flag = true;
 
-				int sMax = seekbar.getMax(); int mMax =
-						mediaPlayer.getDuration(); seekbar.setProgress(postSize *
-								sMax / mMax);
+				int sMax = seekbar.getMax();
+				int mMax = mediaPlayer.getDuration();
+				seekbar.setProgress(postSize * sMax / mMax);
 
-						//seekbar.setProgress(mediaPlayer.getCurrentPosition());
-						pb.setVisibility(View.VISIBLE);
+				// seekbar.setProgress(mediaPlayer.getCurrentPosition());
+				pb.setVisibility(View.VISIBLE);
 			} else {
+				video = listVideo.get(0);
 				VID = listVideo.get(0).getVID();
 				url = listVideo.get(0).getvURL();
 				title.setText(listVideo.get(0).getvTitle());
 				viewtitle.setText(listVideo.get(0).getvTitle());
-				if(listVideo.get(0).getvDescription()!=null&&!listVideo.get(0).getvDescription().equals("")){
-					viewdetail.setText(listVideo.get(0).getvDescription());
-				}else{
-					viewdetail.setText("暂无介绍");
-				}
-				GetVideoInfoByVID(VID,loginname);
-				video=listVideo.get(0);
+				viewdetail.setText(video.getvDoctorName() + " "
+						+ video.getvDoctorDepartment() + " "
+						+ video.getvDoctorHospital());
+
+				GetVideoInfoByVID(VID, loginname);
+
 				new PlayMovie(0, url).start(); // 表明是第一次开始播放
 
 			}
@@ -579,70 +600,66 @@ OnScrollListener, OnClickListener,PlayOther {
 				if (!b) {
 					setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 					// 当前为横屏， 在此处添加额外的处理代码
-					/*ViewGroup.LayoutParams lp = ll2.getLayoutParams();
-					lp.width=height;
-					lp.height = width;
-					ll2.setLayoutParams(lp);
-					imageView1.setImageResource(R.drawable.minscreen);
-					display = true;
-					b = true;*/
-					 
+					/*
+					 * ViewGroup.LayoutParams lp = ll2.getLayoutParams();
+					 * lp.width=height; lp.height = width;
+					 * ll2.setLayoutParams(lp);
+					 * imageView1.setImageResource(R.drawable.minscreen);
+					 * display = true; b = true;
+					 */
 
 				}
 				// 横排
 				else {
 					setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-					/*ViewGroup.LayoutParams lp = ll2.getLayoutParams();
-					lp.width=width;
-					lp.height =DipToPixels(VideoActivity.this,250);;
-					ll2.setLayoutParams(lp);
-					display = true;
-					imageView1.setImageResource(R.drawable.maxscreen);
-					b = false;*/
-					 
+					/*
+					 * ViewGroup.LayoutParams lp = ll2.getLayoutParams();
+					 * lp.width=width; lp.height
+					 * =DipToPixels(VideoActivity.this,250);;
+					 * ll2.setLayoutParams(lp); display = true;
+					 * imageView1.setImageResource(R.drawable.maxscreen); b =
+					 * false;
+					 */
+
 				}
 
-				/*new Handler().postDelayed(new Runnable() {
+				/*
+				 * new Handler().postDelayed(new Runnable() {
+				 * 
+				 * @Override public void run() { getwiandHeiht(); } }, 100);
+				 */
+
+			}
+		});
+
+		mediaPlayer
+				.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
+					@Override
+					public void onBufferingUpdate(MediaPlayer mp,
+							int bufferingProgress) {
+						seekbar.setSecondaryProgress(bufferingProgress);
+					}
+				});
+		mediaPlayer
+				.setOnVideoSizeChangedListener(new OnVideoSizeChangedListener() {
 
 					@Override
-					public void run() {
+					public void onVideoSizeChanged(MediaPlayer mp, int width,
+							int height) {
+						// TODO Auto-generated method stub
 						getwiandHeiht();
+
 					}
-				}, 100);*/
-
-			}
-		});
-
+				});
 
 		mediaPlayer
-		.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
-			@Override
-			public void onBufferingUpdate(MediaPlayer mp,
-					int bufferingProgress) {
-				seekbar.setSecondaryProgress(bufferingProgress);
-			}
-		});
-		mediaPlayer
-		.setOnVideoSizeChangedListener(new OnVideoSizeChangedListener() {
-
-			@Override
-			public void onVideoSizeChanged(MediaPlayer mp, int width,
-					int height) {
-				// TODO Auto-generated method stub
-				getwiandHeiht();
-
-			}
-		});
-
-
-		mediaPlayer
-		.setOnCompletionListener(new MediaPlayer.OnCompletionListener() { // 视频播放完成
-			@Override
-			public void onCompletion(MediaPlayer mp) {
-				flag = false;
-				bt.setImageResource(R.drawable.movieplay);
-			}
-		});
+				.setOnCompletionListener(new MediaPlayer.OnCompletionListener() { // 视频播放完成
+					@Override
+					public void onCompletion(MediaPlayer mp) {
+						flag = false;
+						bt.setImageResource(R.drawable.movieplay);
+					}
+				});
 		mediaPlayer.setOnInfoListener(new OnInfoListener() {
 
 			@Override
@@ -706,13 +723,12 @@ OnScrollListener, OnClickListener,PlayOther {
 			@Override
 			public void onStopTrackingTouch(SeekBar seekBar) {
 
-
 				int value = seekbar.getProgress() * mediaPlayer.getDuration()
 						/ seekbar.getMax();
 				// 计算进度条需要前进的位置数据大小
 				mediaPlayer.seekTo(value);
 				showViewTag();
-				//mediaPlayer.seekTo(seekbar.getProgress());
+				// mediaPlayer.seekTo(seekbar.getProgress());
 
 			}
 
@@ -734,8 +750,10 @@ OnScrollListener, OnClickListener,PlayOther {
 			@Override
 			public void onClick(View v) {
 				if (display) {
-					Animation animation1=AnimationUtils.loadAnimation(getApplicationContext(), R.anim.out_to_top);
-					Animation animation2=AnimationUtils.loadAnimation(getApplicationContext(), R.anim.out_to_bottom);					
+					Animation animation1 = AnimationUtils.loadAnimation(
+							getApplicationContext(), R.anim.out_to_top);
+					Animation animation2 = AnimationUtils.loadAnimation(
+							getApplicationContext(), R.anim.out_to_bottom);
 					bt.setVisibility(View.GONE);
 					ll.setAnimation(animation1);
 					ll0.setAnimation(animation2);
@@ -744,15 +762,17 @@ OnScrollListener, OnClickListener,PlayOther {
 					soundBar.setVisibility(View.GONE);
 					display = false;
 				} else {
-					Animation animation3=AnimationUtils.loadAnimation(getApplicationContext(), R.anim.in_from_top);
-					Animation animation4=AnimationUtils.loadAnimation(getApplicationContext(), R.anim.in_from_bottom);
+					Animation animation3 = AnimationUtils.loadAnimation(
+							getApplicationContext(), R.anim.in_from_top);
+					Animation animation4 = AnimationUtils.loadAnimation(
+							getApplicationContext(), R.anim.in_from_bottom);
 					ll.setAnimation(animation3);
 					ll0.setAnimation(animation4);
 					ll.setVisibility(View.VISIBLE);
 					ll0.setVisibility(View.VISIBLE);
 					bt.setVisibility(View.VISIBLE);
 					pView.setVisibility(View.VISIBLE);
-					//					soundBar.setVisibility(View.VISIBLE);
+					// soundBar.setVisibility(View.VISIBLE);
 					display = true;
 				}
 
@@ -761,12 +781,11 @@ OnScrollListener, OnClickListener,PlayOther {
 
 	}
 
-
-
 	/**
 	 * 根据视屏Id,uid查询视屏其他相关信息
 	 */
 	List<VideoTagData> vtd;
+
 	void GetVideoInfoByVID(String VID, String LoginID) {
 		FinalHttp http = new FinalHttp();
 		AjaxParams params = new AjaxParams();
@@ -776,55 +795,57 @@ OnScrollListener, OnClickListener,PlayOther {
 				+ "WS_GetVideoInfoByVID.asmx/GetVideoInfoByVID", params,
 				new AjaxCallBack<String>() {
 
-			@Override
-			public void onFailure(Throwable t, String strMsg) {
-				// TODO Auto-generated method stub
-				super.onFailure(t, strMsg);
-				Toast.makeText(VideoActivity.this, strMsg, 0).show();
-			}
-
-			@Override
-			public void onSuccess(String t) {
-				// TODO Auto-generated method stub
-				super.onSuccess(t);
-				try {
-					JSONObject joResult = new JSONObject(XmlParser
-							.xmltojson(t));
-					Gson g = new Gson();
-					List<OneVideoMore> ovm = g.fromJson(
-							joResult.getString("VideoData"),
-							new TypeToken<List<OneVideoMore>>() {
-							}.getType());
-					vtd = g.fromJson(
-							joResult.getString("VideoTagData"),
-							new TypeToken<List<VideoTagData>>() {
-							}.getType());
-					if (ovm.get(0).getIsFavorite() != null
-							&& ovm.get(0).getIsFavorite().equals("1")) {
-						shoucang.setImageResource(R.drawable.star);
-						shoucang2.setImageResource(R.drawable.shoucang2);
-
-					}else{
-
-						shoucang.setImageResource(R.drawable.bt_star_a);
-						shoucang2.setImageResource(R.drawable.shoucang1);
-
-					}
-					zannum.setText(ovm.get(0).getCounterGood());
-					playnum.setText(ovm.get(0).getCounterPlay());
-					if ("1".equals(ovm.get(0).getIsFavorite())) {
-						blsc = true;
-					} else {
-						blsc = false;
+					@Override
+					public void onFailure(Throwable t, String strMsg) {
+						// TODO Auto-generated method stub
+						super.onFailure(t, strMsg);
+						Toast.makeText(VideoActivity.this, strMsg, 0).show();
 					}
 
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+					@Override
+					public void onSuccess(String t) {
+						// TODO Auto-generated method stub
+						super.onSuccess(t);
+						try {
+							JSONObject joResult = new JSONObject(XmlParser
+									.xmltojson(t));
+							Gson g = new Gson();
+							List<OneVideoMore> ovm = g.fromJson(
+									joResult.getString("VideoData"),
+									new TypeToken<List<OneVideoMore>>() {
+									}.getType());
+							vtd = g.fromJson(
+									joResult.getString("VideoTagData"),
+									new TypeToken<List<VideoTagData>>() {
+									}.getType());
+							if (ovm.get(0).getIsFavorite() != null
+									&& ovm.get(0).getIsFavorite().equals("1")) {
+								shoucang.setImageResource(R.drawable.star);
+								shoucang2
+										.setImageResource(R.drawable.shoucang2);
 
-		});
+							} else {
+
+								shoucang.setImageResource(R.drawable.bt_star_a);
+								shoucang2
+										.setImageResource(R.drawable.shoucang1);
+
+							}
+							zannum.setText(ovm.get(0).getCounterGood());
+							playnum.setText(ovm.get(0).getCounterPlay());
+							if ("1".equals(ovm.get(0).getIsFavorite())) {
+								blsc = true;
+							} else {
+								blsc = false;
+							}
+
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+
+				});
 	}
 
 	/**
@@ -842,86 +863,94 @@ OnScrollListener, OnClickListener,PlayOther {
 				+ "WS_UpdateMyFavorites.asmx/UpdateMyFavorites", params,
 				new AjaxCallBack<String>() {
 
-			@Override
-			public void onFailure(Throwable t, String strMsg) {
-				// TODO Auto-generated method stub
-				super.onFailure(t, strMsg);
-				Toast.makeText(VideoActivity.this, strMsg, 0).show();
-			}
-
-			@Override
-			public void onSuccess(String t) {
-				// TODO Auto-generated method stub
-				super.onSuccess(t);
-				try {
-					JSONObject joResult = new JSONObject(XmlParser
-							.xmltojson(t));
-					String ErrorDesc = joResult.getString("ErrorDesc");
-					if (ErrorDesc.equals("收藏成功")) {
-						shoucang.setImageResource(R.drawable.star);
-						shoucang2.setImageResource(R.drawable.shoucang2);
-						blsc = true;
-						Toast.makeText(VideoActivity.this, ErrorDesc, 0)
-						.show();
-					} else {
-						shoucang.setImageResource(R.drawable.bt_star_a);
-						shoucang2.setImageResource(R.drawable.shoucang1);
-
-						blsc = false;
-						Toast.makeText(VideoActivity.this, "取消收藏", 0)
-						.show();
+					@Override
+					public void onFailure(Throwable t, String strMsg) {
+						// TODO Auto-generated method stub
+						super.onFailure(t, strMsg);
+						Toast.makeText(VideoActivity.this, strMsg, 0).show();
 					}
 
+					@Override
+					public void onSuccess(String t) {
+						// TODO Auto-generated method stub
+						super.onSuccess(t);
+						try {
+							JSONObject joResult = new JSONObject(XmlParser
+									.xmltojson(t));
+							String ErrorDesc = joResult.getString("ErrorDesc");
+							if (ErrorDesc.equals("收藏成功")) {
+								shoucang.setImageResource(R.drawable.star);
+								shoucang2
+										.setImageResource(R.drawable.shoucang2);
+								blsc = true;
+								Toast.makeText(VideoActivity.this, ErrorDesc, 0)
+										.show();
+							} else {
+								shoucang.setImageResource(R.drawable.bt_star_a);
+								shoucang2
+										.setImageResource(R.drawable.shoucang1);
 
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+								blsc = false;
+								Toast.makeText(VideoActivity.this, "取消收藏", 0)
+										.show();
+							}
 
-		});
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+
+				});
 	}
+
 	/**
 	 * 点赞
 	 */
-	void updateVideoCounter(String VID){
+	void updateVideoCounter(String VID) {
 
 		FinalHttp http = new FinalHttp();
 		AjaxParams params = new AjaxParams();
 		params.put("VID", VID);
-		params.put("Type", "2");//2表示点赞
+		params.put("Type", "2");// 2表示点赞
 		http.post(Path.getPath()
 				+ "WS_UpdateVideoCounter.asmx/UpdateVideoCounter", params,
 				new AjaxCallBack<String>() {
 
-			@Override
-			public void onFailure(Throwable t, String strMsg) {
-				// TODO Auto-generated method stub
-				super.onFailure(t, strMsg);
-				Toast.makeText(VideoActivity.this, strMsg, 0).show();
-			}
+					@Override
+					public void onFailure(Throwable t, String strMsg) {
+						// TODO Auto-generated method stub
+						super.onFailure(t, strMsg);
+						Toast.makeText(VideoActivity.this, strMsg, 0).show();
+					}
 
-			@Override
-			public void onSuccess(String t) {
-				// TODO Auto-generated method stub
-				super.onSuccess(t);
-				zanzan.setImageResource(R.drawable.zan2);
-				tv_one.setVisibility(View.VISIBLE);
-				tv_one.startAnimation(animation);
-				new Handler().postDelayed(new Runnable(){
-					public void run() {
-						tv_one.setVisibility(View.GONE);
-					} 
-				}, 1000);
-				zannum.setText(String.valueOf(Integer.parseInt(zannum.getText().toString())+1));
-			}
+					@Override
+					public void onSuccess(String t) {
+						// TODO Auto-generated method stub
+						super.onSuccess(t);
+						zanzan.setImageResource(R.drawable.zan2);
+						tv_one.setVisibility(View.VISIBLE);
+						tv_one.startAnimation(animation);
+						new Handler().postDelayed(new Runnable() {
+							public void run() {
+								tv_one.setVisibility(View.GONE);
+							}
+						}, 1000);
+						zannum.setText(String.valueOf(Integer.parseInt(zannum
+								.getText().toString()) + 1));
+					}
 
-		});
+				});
 	}
 
 	/**
 	 * 更新进度条
 	 */
+	String mintuesString;
+	String secondsString;
+	String nowmintuesString;
+	String nowsecondsString;
+	int mintues,nowmintues,seconds,nowseconds;
 	Handler mHandler = new Handler() {
 		public void handleMessage(Message msg) {
 			if (mediaPlayer == null) {
@@ -932,10 +961,43 @@ OnScrollListener, OnClickListener,PlayOther {
 				int mMax = mediaPlayer.getDuration();
 				int sMax = seekbar.getMax();
 				seekbar.setProgress(position * sMax / mMax);
-				time.setText(mMax / 3600000 + ":" + mMax % 3600000 / 60000
-						+ ":" + mMax % 3600000 % 60000 / 1000);
-				nowtime.setText(position / 3600000 + ":" + position % 3600000
-						/ 60000 + ":" + position % 3600000 % 60000 / 1000);
+				/*
+				 * time.setText(mMax / 3600000 + ":" + mMax % 3600000 / 60000 +
+				 * ":" + mMax % 3600000 % 60000 / 1000);
+				 * nowtime.setText(position / 3600000 + ":" + position % 3600000
+				 * / 60000 + ":" + position % 3600000 % 60000 / 1000);
+				 */
+				 mintues=mMax % 3600000 / 60000;
+				 seconds=mMax % 3600000
+						% 60000 / 1000;
+				 nowmintues=position % 3600000
+							/ 60000;
+				 nowseconds=position % 3600000 % 60000 / 1000;
+				
+				if(mintues>=10){
+					mintuesString=mintues+"";
+				}else {
+					mintuesString="0"+mintues;
+				}
+				if(seconds>=10){
+					secondsString=seconds+"";
+				}else{
+					secondsString="0"+seconds;
+				}
+				
+				if(nowmintues>=10){
+					nowmintuesString=nowmintues+"";
+				}else {
+					nowmintuesString="0"+nowmintues;
+				}
+				if(nowseconds>=10){
+					nowsecondsString=nowseconds+"";
+				}else{
+					nowsecondsString="0"+nowseconds;
+				}
+				time.setText(mintuesString + ":" +secondsString);
+				nowtime.setText(nowmintuesString + ":" + nowsecondsString);
+
 
 			}
 		};
@@ -962,7 +1024,6 @@ OnScrollListener, OnClickListener,PlayOther {
 		}
 
 	}
-
 
 	@Override
 	public void onStopTrackingTouch(SeekBar VerticalSeekBar) {
@@ -1028,7 +1089,7 @@ OnScrollListener, OnClickListener,PlayOther {
 					.getStreamVolume(AudioManager.STREAM_MUSIC));
 			return true;
 		case KeyEvent.KEYCODE_BACK:
-			if (b==true) {
+			if (b == true) {
 				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 				/**
 				 * 设置播放为非全屏
@@ -1039,7 +1100,7 @@ OnScrollListener, OnClickListener,PlayOther {
 				display = true;
 				b = false;
 
-			}else {
+			} else {
 				this.finish();
 			}
 			return true;
@@ -1049,10 +1110,9 @@ OnScrollListener, OnClickListener,PlayOther {
 		return super.onKeyDown(keyCode, event);
 	}
 
-	public void shoucang(){
+	public void shoucang() {
 		if (loginname.equals("")) {
-			startActivity(new Intent(VideoActivity.this,
-					LoginActivity.class));
+			startActivity(new Intent(VideoActivity.this, LoginActivity.class));
 		} else {
 			if (blsc) {
 				updateMyFavorites(loginname, VID, "2");
@@ -1065,44 +1125,42 @@ OnScrollListener, OnClickListener,PlayOther {
 	@Override
 	public void playotherMovie(Video v) {
 		// TODO Auto-generated method stub
-		video=v;
+		video = v;
 		if (mediaPlayer != null) {
-			mediaPlayer.stop(); 
-			flag = false; }
+			mediaPlayer.stop();
+			flag = false;
+		}
 		pb.setVisibility(View.VISIBLE);
 		VID = v.getVID();
 		url = v.getvURL();
 		title.setText(v.getvTitle());
 		viewtitle.setText(v.getvTitle());
-		if(v.getvDescription()!=null&&!v.getvDescription().equals("")){
-			viewdetail.setText(v.getvDescription());
-		}else {
-			viewdetail.setText("暂无介绍");
+		viewdetail.setText(video.getvDoctorName() + " "
+				+ video.getvDoctorDepartment() + " "
+				+ video.getvDoctorHospital());
 
-		}
 		GetVideoInfoByVID(VID + "", loginname);
 		new PlayMovie(0, v.getvURL()).start();
 		lltag.removeAllViews();
 
 	}
-	
-	
 
 	@Override
 	protected void onStop() {
 		// TODO Auto-generated method stub
 		super.onStop();
-		//lltag.removeAllViews();
+		// lltag.removeAllViews();
 	}
 
 	private void showShare(Video v) {
 		ShareSDK.initSDK(this);
 		OnekeyShare oks = new OnekeyShare();
-		//关闭sso授权
-		oks.disableSSOWhenAuthorize(); 
+		// 关闭sso授权
+		oks.disableSSOWhenAuthorize();
 
-		// 分享时Notification的图标和文字  2.5.9以后的版本不调用此方法
-		//oks.setNotification(R.drawable.ic_launcher, getString(R.string.app_name));
+		// 分享时Notification的图标和文字 2.5.9以后的版本不调用此方法
+		// oks.setNotification(R.drawable.ic_launcher,
+		// getString(R.string.app_name));
 		// title标题，印象笔记、邮箱、信息、微信、人人网和QQ空间使用
 		oks.setTitle(v.getvTitle());
 		// titleUrl是标题的网络链接，仅在人人网和QQ空间使用
@@ -1110,7 +1168,7 @@ OnScrollListener, OnClickListener,PlayOther {
 		// text是分享文本，所有平台都需要这个字段
 		oks.setText(v.getvTitle());
 		// imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
-		oks.setImagePath("file://android_asset/dabai.png");//确保SDcard下面存在此张图片
+		oks.setImagePath("file://android_asset/dabai.png");// 确保SDcard下面存在此张图片
 		// url仅在微信（包括好友和朋友圈）中使用
 		oks.setUrl("www.baidu.com");
 		// comment是我对这条分享的评论，仅在人人网和QQ空间使用
@@ -1118,7 +1176,7 @@ OnScrollListener, OnClickListener,PlayOther {
 		// site是分享此内容的网站名称，仅在QQ空间使用
 		// oks.setSite(getString(R.string.app_name));
 		// siteUrl是分享此内容的网站地址，仅在QQ空间使用
-		//oks.setSiteUrl("http://sharesdk.cn");
+		// oks.setSiteUrl("http://sharesdk.cn");
 
 		// 启动分享GUI
 		oks.show(this);
@@ -1134,14 +1192,17 @@ OnScrollListener, OnClickListener,PlayOther {
 		float heightRatio = (float) mVideoHeight / (float) screenHeight;
 		float widthRatio = (float) mVideoWidth / (float) screenWidth;
 
-		if (heightRatio > widthRatio) {//以高为准 
-			mVideoHeight = (int) Math.ceil((float)mVideoHeight / (float)heightRatio); 
-			mVideoWidth = (int) Math.ceil((float)mVideoWidth / (float)heightRatio);    
-		} else {//以宽为准 
-			mVideoHeight = (int) Math.ceil((float)mVideoHeight / (float)widthRatio); 
-			mVideoWidth = (int) Math.ceil((float)mVideoWidth / (float)widthRatio); 
-		} 
-
+		if (heightRatio > widthRatio) {// 以高为准
+			mVideoHeight = (int) Math.ceil((float) mVideoHeight
+					/ (float) heightRatio);
+			mVideoWidth = (int) Math.ceil((float) mVideoWidth
+					/ (float) heightRatio);
+		} else {// 以宽为准
+			mVideoHeight = (int) Math.ceil((float) mVideoHeight
+					/ (float) widthRatio);
+			mVideoWidth = (int) Math.ceil((float) mVideoWidth
+					/ (float) widthRatio);
+		}
 
 		ViewGroup.LayoutParams lp = pView.getLayoutParams();
 		lp.width = mVideoWidth;
@@ -1149,7 +1210,7 @@ OnScrollListener, OnClickListener,PlayOther {
 		pView.setLayoutParams(lp);
 		lltag.setLayoutParams(lp);
 	}
-	
+
 	int i;
 
 	void showViewTag() {
@@ -1177,13 +1238,12 @@ OnScrollListener, OnClickListener,PlayOther {
 						@Override
 						public void onClick(View v) { // TODOAuto-generated
 														// method stub
-							Intent intent=new Intent(VideoActivity.this,
-									  VideoMainActivity.class);
+							Intent intent = new Intent(VideoActivity.this,
+									VideoMainActivity.class);
 							intent.putExtra("VID", vv.getVideoID());
 							intent.putExtra("vTitle", vv.getVtTagText());
 							intent.putExtra("vURL", vv.getvURL());
-							  startActivity(intent);
-							 
+							startActivity(intent);
 
 						}
 					});
@@ -1198,16 +1258,14 @@ OnScrollListener, OnClickListener,PlayOther {
 	}
 
 	// dip转像素
-		public int DipToPixels(Context context, int dip) {
-			final float SCALE = context.getResources().getDisplayMetrics().density;
+	public int DipToPixels(Context context, int dip) {
+		final float SCALE = context.getResources().getDisplayMetrics().density;
 
-			float valueDips = dip;
-			int valuePixels = (int) (valueDips * SCALE + 0.5f);
+		float valueDips = dip;
+		int valuePixels = (int) (valueDips * SCALE + 0.5f);
 
-			return valuePixels;
+		return valuePixels;
 
-		}
-
-
+	}
 
 }

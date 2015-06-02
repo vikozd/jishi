@@ -180,27 +180,38 @@ public class LoginActivity extends FinalActivity {
 				thread.start();
 				try {
 					thread.join();
-					Toast.makeText(getApplicationContext(), "openid="+openid+"nickname="+nickname, 0).show();
-//					String httpUrl=Path.getPath()+"";
-//					AjaxParams params=new AjaxParams();
-//					params.put("openid",openid);
-//					params.put("uname", nickname);
-//					http.post(httpUrl, params,new AjaxCallBack<String>() {
-//
-//						@Override
-//						public void onFailure(Throwable t, String strMsg) {
-//							// TODO Auto-generated method stub
-//							super.onFailure(t, strMsg);
-//						}
-//
-//						@Override
-//						public void onSuccess(String t) {
-//							// TODO Auto-generated method stub
-//							super.onSuccess(t);
-//							
-//						}
-//						
-//					});
+//					Toast.makeText(getApplicationContext(), "openid="+openid+"nickname="+nickname, 0).show();
+					String httpUrl=Path.getPath()+"WS_LoginByWeChat.asmx/APP_JiShi_LoginByWeChat";
+					AjaxParams params=new AjaxParams();
+					params.put("OpenID",openid);
+					params.put("NickName", nickname);
+					http.post(httpUrl, params,new AjaxCallBack<String>() {
+
+						@Override
+						public void onFailure(Throwable t, String strMsg) {
+							// TODO Auto-generated method stub
+							super.onFailure(t, strMsg);
+						}
+
+						@Override
+						public void onSuccess(String t) {
+							// TODO Auto-generated method stub
+							super.onSuccess(t);
+							String t1=t.substring(86, 91);
+							if(t1.equals("false")){
+								editor.putString("openid", openid);
+								editor.putString("loginname", nickname);
+								editor.putString("loginpass", null);
+								editor.commit();
+								Toast.makeText(mContext, "登录成功", Toast.LENGTH_SHORT).show();
+								SpeechApp.resp2=null;
+								LoginActivity.this.finish();
+								
+							}
+							
+						}
+						
+					});
 
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block

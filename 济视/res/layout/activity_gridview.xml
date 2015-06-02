@@ -36,22 +36,31 @@
         android:layout_below="@+id/relative3"
         android:background="@color/gray" />
 
-    <ScrollView
-        android:layout_marginTop="3dp"
-        android:id="@+id/scrollView1"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/relative3"
-        android:fillViewport="true" >
+        android:layout_below="@+id/relative3" >
 
-        <GridView
-            android:id="@+id/gv_bodypart"
+        <ScrollView
+            android:id="@+id/scrollView1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:horizontalSpacing="2dp"
-            android:numColumns="2"
-            android:verticalSpacing="2dp" >
-        </GridView>
-    </ScrollView>
+            android:layout_height="match_parent"
+            android:layout_marginTop="3dp"
+            android:fillViewport="true" >
+
+            <GridView
+                android:id="@+id/gv_bodypart"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:horizontalSpacing="2dp"
+                android:numColumns="2"
+                android:verticalSpacing="2dp" >
+            </GridView>
+        </ScrollView>
+
+        <include
+            android:id="@+id/progressbar"
+            layout="@layout/progressbar" />
+    </FrameLayout>
 
 </RelativeLayout>

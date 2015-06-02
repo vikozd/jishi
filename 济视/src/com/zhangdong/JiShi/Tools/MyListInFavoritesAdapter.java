@@ -73,11 +73,18 @@ public class MyListInFavoritesAdapter extends BaseAdapter{
 					.findViewById(R.id.item_left);
 			viewHolder.item_right = (RelativeLayout) convertView
 					.findViewById(R.id.item_right);
+			viewHolder.ssImageView=(ImageView)convertView
+					.findViewById(R.id.iv_vedioimage);
 
 			viewHolder.ssTextView=(TextView)convertView
 					.findViewById(R.id.tv_vediotitle);
-			viewHolder.ssImageView=(ImageView)convertView
-					.findViewById(R.id.iv_vedioimage);
+			
+			viewHolder.nnTextView=(TextView)convertView
+					.findViewById(R.id.tv_dname);
+			viewHolder.wwTextView=(TextView)convertView
+					.findViewById(R.id.tv_dworkplace);
+			viewHolder.hhTextView=(TextView)convertView
+					.findViewById(R.id.tv_dhospital);
 
 			viewHolder.item_right_txt = (TextView) convertView
 					.findViewById(R.id.item_right_txt);
@@ -111,6 +118,9 @@ public class MyListInFavoritesAdapter extends BaseAdapter{
 			fbBitmap.display(viewHolder.ssImageView, myFavorites.getvPreviewImageURL());
 		} 
 		viewHolder.ssTextView.setText(myFavorites.getvTitle());
+		viewHolder.nnTextView.setText(myFavorites.getvDoctorName());
+		viewHolder.wwTextView.setText(myFavorites.getvDoctorDepartment());
+		viewHolder.hhTextView.setText(myFavorites.getvDoctorHospital());
 		
 		return convertView;
 
@@ -120,6 +130,9 @@ public class MyListInFavoritesAdapter extends BaseAdapter{
 		LinearLayout item_left;
 		RelativeLayout item_right;
 		TextView ssTextView=null;
+		TextView nnTextView=null;
+		TextView hhTextView=null;
+		TextView wwTextView=null;
 		ImageView ssImageView=null;
 		TextView item_right_txt;
 		

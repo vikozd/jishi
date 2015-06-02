@@ -491,6 +491,11 @@ public class VideoMainActivity extends FinalActivity{
 	/**
 	 * 更新进度条
 	 */
+	String mintuesString;
+	String secondsString;
+	String nowmintuesString;
+	String nowsecondsString;
+	int mintues,nowmintues,seconds,nowseconds;
 	Handler mHandler = new Handler() {
 		public void handleMessage(Message msg) {
 			if (mediaPlayer == null) {
@@ -501,10 +506,40 @@ public class VideoMainActivity extends FinalActivity{
 				int mMax = mediaPlayer.getDuration();
 				int sMax = seekbar.getMax();
 				seekbar.setProgress(position * sMax / mMax);
-				time.setText(mMax / 3600000 + ":" + mMax % 3600000 / 60000
+				/*time.setText(mMax / 3600000 + ":" + mMax % 3600000 / 60000
 						+ ":" + mMax % 3600000 % 60000 / 1000);
 				nowtime.setText(position / 3600000 + ":" + position % 3600000
-						/ 60000 + ":" + position % 3600000 % 60000 / 1000);
+						/ 60000 + ":" + position % 3600000 % 60000 / 1000);*/
+				 mintues=mMax % 3600000 / 60000;
+				 seconds=mMax % 3600000
+						% 60000 / 1000;
+				 nowmintues=position % 3600000
+							/ 60000;
+				 nowseconds=position % 3600000 % 60000 / 1000;
+				
+				if(mintues>=10){
+					mintuesString=mintues+"";
+				}else {
+					mintuesString="0"+mintues;
+				}
+				if(seconds>=10){
+					secondsString=seconds+"";
+				}else{
+					secondsString="0"+seconds;
+				}
+				
+				if(nowmintues>=10){
+					nowmintuesString=nowmintues+"";
+				}else {
+					nowmintuesString="0"+nowmintues;
+				}
+				if(nowseconds>=10){
+					nowsecondsString=nowseconds+"";
+				}else{
+					nowsecondsString="0"+nowseconds;
+				}
+				time.setText(mintuesString + ":" +secondsString);
+				nowtime.setText(nowmintuesString + ":" + nowsecondsString);
 
 			}
 		};

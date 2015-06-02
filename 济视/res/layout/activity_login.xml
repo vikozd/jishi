@@ -115,38 +115,38 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
             android:orientation="horizontal" >
 
             <Button
                 android:id="@+id/bnt_weixindenglu"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
                 android:background="@drawable/regist_button_change"
-                android:gravity="left"
-                android:paddingLeft="30dp"
-                android:paddingRight="30dp"
+                android:gravity="center"
+                android:padding="8dp"
+                android:layout_weight="1"
                 android:text="微信登录 "
-                android:textSize="15sp" />
+                android:textColor="@color/light_black"
+                android:textSize="17sp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="right"
-                android:orientation="horizontal" >
+            
 
                 <Button
                     android:id="@+id/bnt_register"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
                     android:background="@drawable/regist_button_change"
                     android:gravity="center"
-                    android:paddingLeft="30dp"
-                    android:paddingRight="30dp"
+                    android:layout_weight="1"
+                    android:padding="8dp"
+                    android:layout_marginLeft="50dp"
                     android:text="注  册"
+                    android:textColor="@color/light_black"
                     android:textSize="17sp" />
-            </LinearLayout>
+            
         </LinearLayout>
     </LinearLayout>
 

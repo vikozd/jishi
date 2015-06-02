@@ -35,8 +35,8 @@
             android:layout_alignRight="@+id/bnt_talk"
             android:layout_centerHorizontal="true"
             android:gravity="center"
-            android:textColor="@color/gray"
-            android:text="按住说话" />
+            android:text="按住说话"
+            android:textColor="@color/gray" />
 
         <Button
             android:id="@+id/bnt_body"
@@ -57,63 +57,87 @@
             android:background="@drawable/search_icon" />
     </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/linearView1"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/relative4"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/bnt_user" >
+        android:layout_below="@+id/bnt_user"
+        android:layout_marginTop="10dp" >
 
         <LinearLayout
+            android:id="@+id/linearView1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-             >
-
-            <RelativeLayout
-                android:id="@+id/ll_help"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
-
-                <ImageView
-                    android:id="@+id/imageView1"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginTop="6dp"
-                    android:src="@drawable/doctor" />
-
-                <TextView
-                    android:id="@+id/textView1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_below="@+id/imageView1"
-                    android:layout_marginRight="25dp"
-                    android:text="what can I do for you？"
-                    android:textSize="20sp"
-                    />
-
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/textView1"
-                    android:layout_below="@+id/textView1"
-                    android:text="很高兴为您服务。"
-                    />
-            </RelativeLayout>
+            android:layout_height="match_parent" >
 
             <LinearLayout
-                android:id="@+id/ll"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                
+                android:layout_height="wrap_content"
                 android:orientation="vertical" >
+
+                <RelativeLayout
+                    android:id="@+id/ll_help"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <ImageView
+                        android:id="@+id/imageView1"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginTop="6dp"
+                        android:src="@drawable/doctor" />
+
+                    <TextView
+                        android:id="@+id/textView1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@+id/imageView1"
+                        android:layout_marginRight="25dp"
+                        android:text="what can I do for you？"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignLeft="@+id/textView1"
+                        android:layout_below="@+id/textView1"
+                        android:text="很高兴为您服务。" />
+                </RelativeLayout>
             </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llpb"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone" >
+
+            <ProgressBar
+                android:id="@+id/progressBar1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="加载中"
+                android:textSize="20sp" />
+        </LinearLayout>
+    </FrameLayout>
 
 </RelativeLayout>

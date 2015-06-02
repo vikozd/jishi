@@ -5,6 +5,7 @@ import java.util.List;
 import net.tsz.afinal.FinalBitmap;
 
 import com.zhangdong.JiShi.R;
+import com.zhangdong.JiShi.VideoActivity;
 import com.zhangdong.JiShi.Fragment.Frag1.Listadapte;
 import com.zhangdong.JiShi.Tools.NoScrollListView;
 import com.zhangdong.util.Video;
@@ -15,14 +16,16 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
 
 public class Frag4 extends Fragment {
 
-	Activity activity;
+	VideoActivity activity;
 	private View view1;
 	LinearLayout lll;
 	NoScrollListView list;
@@ -33,7 +36,7 @@ public class Frag4 extends Fragment {
 	@Override
 	public void onAttach(Activity activity) {
 		// TODO Auto-generated method stub
-		this.activity = activity;
+		this.activity = (VideoActivity) activity;
 		super.onAttach(activity);
 	}
 
@@ -48,21 +51,19 @@ public class Frag4 extends Fragment {
 		this.inflater = inflater;
 		view1 = inflater.inflate(R.layout.frag4, container, false);
 		list = (NoScrollListView) view1.findViewById(R.id.list);
-		// lll = (LinearLayout) view1.findViewById(R.id.viko);
 		Listadapte adapter = new Listadapte();
 		list.setAdapter(adapter);
-		/*
-		 * for (int i = 0; i < l.size(); i++) { // LayoutInflater iInflater2 =
-		 * LayoutInflater.from(activity); view2 =
-		 * inflater.inflate(R.layout.title, container, false); // img =
-		 * (ImageView) view2.findViewById(R.id.viewpic); describle = (TextView)
-		 * view2.findViewById(R.id.describle); tag = (TextView)
-		 * view2.findViewById(R.id.tag);
-		 * describle.setText(l.get(i).get("name").toString());
-		 * tag.setText(l.get(i).get("tag").toString()); lll.addView(view2); }
-		 */
+		list.setOnItemClickListener(new OnItemClickListener() {
 
-		// return inflater.inflate(R.layout.frag1, container, false);
+			@Override
+			public void onItemClick(AdapterView<?> listview, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				Video v = (Video) listview.getItemAtPosition(position);
+				activity.playotherMovie(v);
+
+			}
+		});
 		return view1;
 	}
 

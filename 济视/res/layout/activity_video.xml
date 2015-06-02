@@ -14,24 +14,23 @@
         <FrameLayout
             android:id="@+id/frameLayout1"
             android:layout_width="match_parent"
-            android:background="@color/black"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent"
+            android:background="@color/black" >
 
             <SurfaceView
                 android:id="@+id/mSurfaceView"
                 android:layout_width="wrap_content"
-                android:layout_gravity="center"
-                android:layout_height="wrap_content" />
-            
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+
             <LinearLayout
                 android:id="@+id/lltag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingTop="30dp"
                 android:layout_gravity="center"
                 android:gravity="right"
-                 >
+                android:orientation="vertical"
+                android:paddingTop="30dp" >
             </LinearLayout>
 
             <LinearLayout
@@ -48,8 +47,8 @@
                     android:layout_height="20dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dp"
-                    android:src="@drawable/back1"
-                    android:scaleType="fitCenter" />
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/back1" />
 
                 <TextView
                     android:id="@+id/title"
@@ -168,8 +167,7 @@
                     android:layout_gravity="right|top"
                     android:layout_marginRight="5dp"
                     android:background="@drawable/mark"
-                    android:visibility="gone"
-                     />
+                    android:visibility="gone" />
 
                 <com.zhangdong.JiShi.Tools.VerticalSeekBar
                     android:id="@+id/sound"
@@ -215,8 +213,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right|top"
-                    android:layout_marginTop="60dp"
                     android:layout_marginRight="50dp"
+                    android:layout_marginTop="60dp"
                     android:text="赞  +1"
                     android:textColor="@color/red"
                     android:textSize="18sp"
@@ -283,13 +281,13 @@
                                 android:text="人觉得赞"
                                 android:textColor="@color/gray" />
 
-                            <ImageView
+                            <!-- <ImageView
                                 android:id="@+id/zanpic"
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
                                 android:layout_marginLeft="10dp"
                                 android:scaleType="fitCenter"
-                                android:src="@drawable/good" />
+                                android:src="@drawable/good" /> -->
                         </LinearLayout>
                     </LinearLayout>
 
@@ -414,7 +412,8 @@
                         <View
                             android:layout_width="1dp"
                             android:layout_height="20dp"
-                            android:background="@color/gray" />
+                            android:background="@color/gray"
+                            android:visibility="gone" />
 
                         <TextView
                             android:id="@+id/text4"
@@ -423,7 +422,8 @@
                             android:layout_weight="1"
                             android:gravity="center"
                             android:text="开百宝箱"
-                            android:textSize="16sp" />
+                            android:textSize="16sp"
+                            android:visibility="gone" />
                     </LinearLayout>
 
                     <FrameLayout
@@ -484,6 +484,7 @@
                     <View
                         android:layout_width="1dp"
                         android:layout_height="20dp"
+                         android:visibility="gone"
                         android:background="@color/gray" />
 
                     <TextView
@@ -493,6 +494,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="开百宝箱"
+                        android:visibility="gone"
                         android:textColor="@color/light_black"
                         android:textSize="16sp" />
                 </LinearLayout>

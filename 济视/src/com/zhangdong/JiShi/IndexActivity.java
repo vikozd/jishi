@@ -86,22 +86,24 @@ public class IndexActivity extends FinalActivity implements OnClickListener {
 	Boolean b = true;
 	String likeUsers = "";
 	View view;
-	TextView mTextView, txt2,textView1,textView2;
+	TextView mTextView, txt2, textView1, textView2;
 	ImageView img1, img7;
 	RelativeLayout rll, show;
 	// Frame动画
 	private AnimationDrawable animDance;
-    String []chniese={"您好！有什么可以帮到您吗？","您有什么健康问题想了解吗？","您想了解什么疾病的内容？"};
-    String []english={"Hello, what can I do for you?","Do you have any medical problems？","what kind of disease do you want to know？"};
+	String[] chniese = { "您好！有什么可以帮到您吗？", "您有什么健康问题想了解吗？", "您想了解什么疾病的内容？" };
+	String[] english = { "Hello, what can I do for you?",
+			"Do you have any medical problems？",
+			"what kind of disease do you want to know？" };
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_index);
-		
+
 		initLayout();
-        
+
 		// 初始化识别对象
 		mIat = SpeechRecognizer.createRecognizer(this, null);
 		mSharedPreferences = getSharedPreferences("com.iflytek.setting",
@@ -109,16 +111,16 @@ public class IndexActivity extends FinalActivity implements OnClickListener {
 		mToast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
 
 	}
-	
-	
 
 	/**
 	 * 初始化Layout。
 	 */
+	LinearLayout llpb;
+
 	private void initLayout() {
 		bt1 = (Button) findViewById(R.id.bnt_talk);
 		// bt1.setOnClickListener(this);
-        
+		llpb = (LinearLayout) findViewById(R.id.llpb);
 		bt2 = (Button) findViewById(R.id.bnt_body);
 		bt2.setOnClickListener(this);
 		bt3 = (Button) findViewById(R.id.bnt_search);
@@ -126,21 +128,21 @@ public class IndexActivity extends FinalActivity implements OnClickListener {
 		bt4 = (Button) findViewById(R.id.bnt_user);
 		bt4.setOnClickListener(this);
 		ll = (LinearLayout) findViewById(R.id.ll);
-        int a=(int) (Math.random()*3);
+		int a = (int) (Math.random() * 3);
 		LayoutInflater iInflater = LayoutInflater.from(getApplicationContext());
 		view = iInflater.inflate(R.layout.askandanswer, null);
 		rll = (RelativeLayout) view.findViewById(R.id.RelativeLayout1);
 		linear1 = (LinearLayout) view.findViewById(R.id.linear1);
 		linear2 = (LinearLayout) view.findViewById(R.id.linear2);
-		ll_help=(RelativeLayout) findViewById(R.id.ll_help);
+		ll_help = (RelativeLayout) findViewById(R.id.ll_help);
 		mResultText = (EditText) view.findViewById(R.id.textView1);
-		textView1=(TextView) findViewById(R.id.textView1);
-		textView2=(TextView) findViewById(R.id.textView2);
-        int i= (int) (Math.random()*2);
-        textView1.setText(chniese[i]);
-        textView2.setText(english[i]);
+		textView1 = (TextView) findViewById(R.id.textView1);
+		textView2 = (TextView) findViewById(R.id.textView2);
+		int i = (int) (Math.random() * 2);
+		textView1.setText(chniese[i]);
+		textView2.setText(english[i]);
 
-		mResultText.setImeOptions(EditorInfo.IME_ACTION_SEARCH);  
+		mResultText.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
 		mResultText.setOnFocusChangeListener(new OnFocusChangeListener() {
 
 			@Override
@@ -190,7 +192,7 @@ public class IndexActivity extends FinalActivity implements OnClickListener {
 				ret = mIat.startListening(recognizerListener);
 				if (ret != ErrorCode.SUCCESS) {
 					showTip("听写失败,错误码：" + ret);
-					//finishWork();
+					// finishWork();
 				} else {
 					showTip(getString(R.string.text_begin));
 				}
@@ -238,22 +240,23 @@ public class IndexActivity extends FinalActivity implements OnClickListener {
 		switch (view.getId()) {
 		case R.id.bnt_body:
 
-			SpeechApp.index=0;
+			SpeechApp.index = 0;
 			SpeechApp.v.setCurrentItem(SpeechApp.index);
 			break;
 		case R.id.bnt_search:
-			SpeechApp.index=2;
+			SpeechApp.index = 2;
 			SpeechApp.v.setCurrentItem(SpeechApp.index);
 			break;
 
 		case R.id.bnt_user:
-			if(loginname==""){
-				Intent intent3=new Intent();
+			if (loginname == "") {
+				Intent intent3 = new Intent();
 				intent3.setClass(getApplicationContext(), LoginActivity.class);
 				startActivity(intent3);
-			}else {
-				Intent intent2=new Intent();
-				intent2.setClass(getApplicationContext(), MyCenterActivity.class);
+			} else {
+				Intent intent2 = new Intent();
+				intent2.setClass(getApplicationContext(),
+						MyCenterActivity.class);
 				startActivity(intent2);
 			}
 			break;
@@ -285,7 +288,7 @@ public class IndexActivity extends FinalActivity implements OnClickListener {
 			// 错误码：10118(您没有说话)，可能是录音机权限被禁，需要提示用户打开应用的录音权限。
 			// 如果使用本地功能（语音+）需要提示用户开启语音+的录音权限。
 			showTip(error.getPlainDescription(true));
-			//finishWork();
+			// finishWork();
 			showhide(1);
 			mResultText.setText("你没有说任何话");
 			img7.setVisibility(View.VISIBLE);
@@ -303,8 +306,8 @@ public class IndexActivity extends FinalActivity implements OnClickListener {
 
 			printResult(results);
 			if (isLast) {
-				//finishWork();
-				//showhide(1);
+				// finishWork();
+				// showhide(1);
 				String resulet = mResultText
 						.getText()
 						.toString()
@@ -332,48 +335,37 @@ public class IndexActivity extends FinalActivity implements OnClickListener {
 	};
 
 	int i;
-	/*private SpannableStringBuilder addClickablePart(final String str) {
 
-		SpannableStringBuilder ssb = new SpannableStringBuilder();
-		ssb.append(str);
+	/*
+	 * private SpannableStringBuilder addClickablePart(final String str) {
+	 * 
+	 * SpannableStringBuilder ssb = new SpannableStringBuilder();
+	 * ssb.append(str);
+	 * 
+	 * final String[] likeUsers = str.split(",");
+	 * 
+	 * if (likeUsers.length > 0) { // 最后一个 for (i = 0; i < likeUsers.length;
+	 * i++) { final String name = likeUsers[i]; final int start =
+	 * str.indexOf(name); ssb.setSpan(new ClickableSpan() {
+	 * 
+	 * @Override public void onClick(View widget) {
+	 * //SearchVideoByKeywords(name); SearchVideoByKeywords(str);
+	 * 
+	 * }
+	 * 
+	 * @Override public void updateDrawState(TextPaint ds) {
+	 * super.updateDrawState(ds); ds.setColor(Color.RED); // 设置文本颜色 // 去掉下划线
+	 * ds.setUnderlineText(false); }
+	 * 
+	 * }, start, start + name.length(),
+	 * 
+	 * Spanned.SPAN_EXCLUSIVE_EXCLUSIVE); } } return ssb.append("等"); }
+	 */
 
-		final String[] likeUsers = str.split(",");
-
-		if (likeUsers.length > 0) {
-			// 最后一个
-			for (i = 0; i < likeUsers.length; i++) {
-				final String name = likeUsers[i];
-				final int start = str.indexOf(name);
-				ssb.setSpan(new ClickableSpan() {
-
-					@Override
-					public void onClick(View widget) {
-						//SearchVideoByKeywords(name);
-						SearchVideoByKeywords(str);
-
-					}
-
-					@Override
-					public void updateDrawState(TextPaint ds) {
-						super.updateDrawState(ds);
-						ds.setColor(Color.RED); // 设置文本颜色
-						// 去掉下划线
-						ds.setUnderlineText(false);
-					}
-
-				}, start, start + name.length(),
-
-				Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-			}
-		}
-		return ssb.append("等");
-	}*/
-
-	/*private void finishWork() {
-		animDance.stop();
-		img1.setVisibility(View.GONE);
-		txt2.setVisibility(View.GONE);
-	}*/
+	/*
+	 * private void finishWork() { animDance.stop();
+	 * img1.setVisibility(View.GONE); txt2.setVisibility(View.GONE); }
+	 */
 
 	private void showhide(int i) {
 		if (i == 0) {
@@ -415,6 +407,7 @@ public class IndexActivity extends FinalActivity implements OnClickListener {
 
 	private void showTip(final String str) {
 		mToast.setText(str);
+		mToast.setMargin(0f, 0.2f);
 		mToast.show();
 	}
 
@@ -474,7 +467,6 @@ public class IndexActivity extends FinalActivity implements OnClickListener {
 		mIat.destroy();
 	}
 
-	
 	protected void onResume() {
 		// 移动数据统计分析
 		FlowerCollector.onResume(IndexActivity.this);
@@ -500,78 +492,95 @@ public class IndexActivity extends FinalActivity implements OnClickListener {
 		http.post(Path.getPath()
 				+ "WS_GetKeywordsByVoiceText.asmx/GetKeywordsByVoiceText",
 				params, new AjaxCallBack<String>() {
-			@Override
-			public void onSuccess(String t) {
-				super.onSuccess(t);
-				JSONObject joResult;
-				likeUsers = "";
-				try {
-					joResult = new JSONObject(XmlParser.xmltojson(t));
-					if (joResult.getString("Error").equals("true")) {
-						
-						mTextView.setText("没有相关结果");
-						 showhide(1);
-					} else {
-						Gson g = new Gson();
-						List<vkKeyword> l = g.fromJson(
-								joResult.getString("Data"),
-								new TypeToken<List<vkKeyword>>() {
-								}.getType());
-						for (vkKeyword vk : l) {
-							likeUsers += vk.getVkKeyword() + ",";
+					@Override
+					public void onSuccess(String t) {
+						super.onSuccess(t);
+
+						JSONObject joResult;
+						likeUsers = "";
+						try {
+							joResult = new JSONObject(XmlParser.xmltojson(t));
+							if (joResult.getString("Error").equals("true")) {
+
+								mTextView.setText("没有相关结果");
+								showhide(1);
+							} else {
+								Gson g = new Gson();
+								List<vkKeyword> l = g.fromJson(
+										joResult.getString("Data"),
+										new TypeToken<List<vkKeyword>>() {
+										}.getType());
+								for (vkKeyword vk : l) {
+									likeUsers += vk.getVkKeyword() + ",";
+								}
+								likeUsers = likeUsers.substring(0,
+										likeUsers.lastIndexOf(","));
+								mTextView.setMovementMethod(LinkMovementMethod
+										.getInstance());
+								// 先构造SpannableString
+								SpannableStringBuilder spanString1 = new SpannableStringBuilder(
+										"您要问的是:" + likeUsers + "么？");
+								// SpannableStringBuilder spanString2 = new
+								// SpannableStringBuilder(likeUsers);
+								// SpannableStringBuilder spanString3 = new
+								// SpannableStringBuilder("么?");
+								// 再构造一个改变字体颜色的Span
+								/*
+								 * ForegroundColorSpan span = new
+								 * ForegroundColorSpan(); Color c= new
+								 * Color(168,0,30);
+								 */
+								// 将这个Span应用于指定范围的字体
+								// Toast.makeText(IndexActivity.this,
+								// likeUsers+"length="+likeUsers.length(),
+								// 0).show();
+								spanString1.setSpan(new ClickableSpan() {
+
+									@Override
+									public void onClick(View widget) {
+										SearchVideoByKeywords(likeUsers);
+									}
+
+									@Override
+									public void updateDrawState(TextPaint ds) {
+										super.updateDrawState(ds);
+										ds.setColor(0xffa8001e); // 设置文本颜色
+										// 下划线
+										ds.setUnderlineText(true);
+									}
+
+								}, 6, 6 + likeUsers.length(),
+										Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+								// spanString.append("等");
+
+								// spanString1.append(spanString2);
+								// Toast.makeText(IndexActivity.this,
+								// "spanString2="+spanString2, 0).show();
+
+								// Toast.makeText(this, spanString2.g,
+								// 0).show();
+
+								// spanString1.append(spanString3);
+
+								mTextView.setText(spanString1);
+								// Toast.makeText(this, spanString1, 0).show();
+								showhide(1);
+
+							}
+						} catch (JSONException e) {
+							e.printStackTrace();
 						}
-						likeUsers = likeUsers.substring(0,
-								likeUsers.lastIndexOf(","));
-						mTextView.setMovementMethod(LinkMovementMethod
-								.getInstance());
-						//先构造SpannableString
-						SpannableStringBuilder spanString1 = new SpannableStringBuilder("您要问的是:"+likeUsers+"么？");
-						//SpannableStringBuilder spanString2 = new SpannableStringBuilder(likeUsers);
-						//SpannableStringBuilder spanString3 = new SpannableStringBuilder("么?");
-				       //再构造一个改变字体颜色的Span
-				        /*ForegroundColorSpan span = new ForegroundColorSpan(); 
-				        Color c= new Color(168,0,30);*/
-				        //将这个Span应用于指定范围的字体
-						//Toast.makeText(IndexActivity.this, likeUsers+"length="+likeUsers.length(), 0).show();
-				        spanString1.setSpan(new ClickableSpan() {
-							  
-							  @Override public void onClick(View widget) {
-							            SearchVideoByKeywords(likeUsers);
-							  }
-							  @Override public void updateDrawState(TextPaint ds) {
-							  super.updateDrawState(ds); ds.setColor(0xffa8001e); // 设置文本颜色
-							  //  下划线 
-							   ds.setUnderlineText(true); }
-							  
-							  }, 6, 6+likeUsers.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE); 
-				        //spanString.append("等");
-				        
-				        //spanString1.append(spanString2);
-						//Toast.makeText(IndexActivity.this, "spanString2="+spanString2, 0).show();
-
-				         //  Toast.makeText(this, spanString2.g, 0).show();
-
-				        //spanString1.append(spanString3);
-				        
-				           mTextView.setText(spanString1);
-				           //Toast.makeText(this, spanString1, 0).show();
-				           showhide(1);
 
 					}
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
 
-			}
+					@Override
+					public void onFailure(Throwable t, String strMsg) {
+						super.onFailure(t, strMsg);
+						mTextView.setText(strMsg);
 
-			@Override
-			public void onFailure(Throwable t, String strMsg) {
-				super.onFailure(t, strMsg);
-				mTextView.setText(strMsg);
-				
-			}
+					}
 
-		});
+				});
 	}
 
 	// 关键查询视屏
@@ -582,38 +591,46 @@ public class IndexActivity extends FinalActivity implements OnClickListener {
 		http.post(Path.getPath()
 				+ "WS_SearchVideoByKeywords.asmx/SearchVideoByKeywords",
 				params, new AjaxCallBack<String>() {
-			@Override
-			public void onSuccess(String t) {
-				super.onSuccess(t);
-				JSONObject joResult;
-				try {
-					joResult = new JSONObject(XmlParser.xmltojson(t));
-					if (joResult.getString("Error").equals("true")) {
-						Toast.makeText(IndexActivity.this, "没有相应的视频", Toast.LENGTH_SHORT)
-						.show();
-					} else {
-						String DataJson = joResult.getString("Data");
-						Intent i = new Intent(IndexActivity.this,
-								VideoActivity.class);
-						i.putExtra("videojson", DataJson);
-						startActivity(i);
+
+					@Override
+					public void onStart() {
+						// TODO Auto-generated method stub
+						super.onStart();
+						llpb.setVisibility(View.VISIBLE);
 					}
 
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
+					@Override
+					public void onSuccess(String t) {
+						super.onSuccess(t);
+						llpb.setVisibility(View.GONE);
+						JSONObject joResult;
+						try {
+							joResult = new JSONObject(XmlParser.xmltojson(t));
+							if (joResult.getString("Error").equals("true")) {
+								showTip("没有相应的视频");
+							} else {
+								String DataJson = joResult.getString("Data");
+								Intent i = new Intent(IndexActivity.this,
+										VideoActivity.class);
+								i.putExtra("videojson", DataJson);
+								startActivity(i);
+							}
 
-			}
+						} catch (JSONException e) {
+							e.printStackTrace();
+						}
 
-			@Override
-			public void onFailure(Throwable t, String strMsg) {
-				super.onFailure(t, strMsg);
-				Toast.makeText(IndexActivity.this, strMsg,
-						Toast.LENGTH_SHORT).show();
+					}
 
-			}
+					@Override
+					public void onFailure(Throwable t, String strMsg) {
+						super.onFailure(t, strMsg);
+						showTip("检查网络");
+						llpb.setVisibility(View.GONE);
 
-		});
+					}
+
+				});
 
 	}
 

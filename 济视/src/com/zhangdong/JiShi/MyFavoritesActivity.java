@@ -178,7 +178,10 @@ public class MyFavoritesActivity extends FinalActivity implements OnPreparedList
 						String vTitle=jsonObject.getString("vTitle");
 						String vURL = jsonObject.getString("vURL");
 						String vPreviewImageURL = jsonObject.getString("vPreviewImageURL");
-						MyFavorites myFavorites = new MyFavorites(vPreviewImageURL,vTitle,vURL, VID,UFID);
+						String vDoctorName = jsonObject.getString("vDoctorName");
+						String vDoctorDepartment = jsonObject.getString("vDoctorDepartment");
+						String vDoctorHospital = jsonObject.getString("vDoctorHospital");
+						MyFavorites myFavorites = new MyFavorites(vPreviewImageURL,vTitle,vURL, VID,UFID,vDoctorName,vDoctorDepartment,vDoctorHospital);
 						ll.add(myFavorites);
 					}
 					if(ll.size()>0)		

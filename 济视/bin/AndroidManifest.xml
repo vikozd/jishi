@@ -59,7 +59,8 @@
             android:name="com.zhangdong.JiShi.LoadActivity"
             android:label="@string/app_name"
            android:screenOrientation="portrait"
-            android:launchMode="singleTask" >
+           
+             >
         </activity>
         <activity
             android:name="com.zhangdong.JiShi.GridViewActivity"
@@ -88,7 +89,7 @@
             android:name="com.zhangdong.JiShi.GuideActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:launchMode="singleTask" >
+             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
