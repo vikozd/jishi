@@ -7,6 +7,7 @@ import cn.sharesdk.wechat.utils.WechatHandlerActivity;
 import com.tencent.mm.sdk.modelbase.BaseReq;
 import com.tencent.mm.sdk.modelbase.BaseResp;
 import com.tencent.mm.sdk.modelmsg.SendAuth;
+import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
 import com.zhangdong.JiShi.R;
 import com.zhangdong.JiShi.Tools.SpeechApp;
@@ -66,7 +67,7 @@ public class WXEntryActivity extends WechatHandlerActivity implements
 
 	@Override
 	public void onResp(BaseResp resp) {
-		if (resp.getClass().getName().equals("SendMessageToWX")) {
+		if (resp instanceof SendAuth.Resp) {
 
 			String result = "";
 

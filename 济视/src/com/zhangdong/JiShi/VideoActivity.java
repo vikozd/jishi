@@ -143,7 +143,6 @@ public class VideoActivity extends FragmentActivity implements
 		// TODO Auto-generated method stub
 		super.onResume();
 		startListener();
-		Toast.makeText(this, "onResume", 0).show();
 		sp = getSharedPreferences("userinfo", MODE_PRIVATE);
 		if (!sp.getString("openid", "").equals("")) {
 			loginname = sp.getString("openid", "");
@@ -176,7 +175,6 @@ public class VideoActivity extends FragmentActivity implements
 	protected void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
-		Toast.makeText(this, "onPause", 0).show();
 		if (mediaPlayer.isPlaying()) {
 			bt.setImageResource(R.drawable.movieplay);
 			mediaPlayer.pause();
@@ -567,7 +565,6 @@ public class VideoActivity extends FragmentActivity implements
 		@Override
 		public void surfaceChanged(SurfaceHolder holder, int format, int width,
 				int height) {
-			Toast.makeText(VideoActivity.this, "surfaceChanged", 0).show();
 
 		}
 
@@ -579,12 +576,10 @@ public class VideoActivity extends FragmentActivity implements
 				int sMax = seekbar.getMax();
 				int mMax = mediaPlayer.getDuration();
 				seekbar.setProgress(postSize * sMax / mMax);
-				Toast.makeText(VideoActivity.this, "surfaceCreated 旧activity", 0).show();
 
 				// seekbar.setProgress(mediaPlayer.getCurrentPosition());
 				pb.setVisibility(View.VISIBLE);
 			} else {
-				Toast.makeText(VideoActivity.this, "surfaceCreated 新activity", 0).show();
 
 				video = listVideo.get(0);
 				VID = listVideo.get(0).getVID();
@@ -1023,7 +1018,6 @@ public class VideoActivity extends FragmentActivity implements
 			mediaPlayer.release();
 			mediaPlayer = null;
 		}
-		Toast.makeText(this, "onDestroy", 0).show();
 		
 
 	}
@@ -1152,7 +1146,6 @@ public class VideoActivity extends FragmentActivity implements
 	protected void onStop() {
 		// TODO Auto-generated method stub
 		super.onStop();
-		Toast.makeText(VideoActivity.this, "onStop", 0).show();
 	}
 
 	private void showShare(Video v) {
