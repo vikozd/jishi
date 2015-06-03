@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.zhangdong.JiShi.Path.Path;
 import com.zhangdong.JiShi.Tools.XmlParser;
+import com.zhangdong.JiShi.VideoActivity.PlayMovie;
 import com.zhangdong.util.OneVideoMore;
 import com.zhangdong.util.Video;
 import com.zhangdong.util.VideoTagData;
@@ -20,8 +21,10 @@ import net.tsz.afinal.FinalActivity;
 import net.tsz.afinal.FinalHttp;
 import net.tsz.afinal.http.AjaxCallBack;
 import net.tsz.afinal.http.AjaxParams;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.media.MediaPlayer.OnVideoSizeChangedListener;
@@ -35,6 +38,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.Window;
@@ -85,16 +89,50 @@ public class VideoMainActivity extends FinalActivity{
 
 	}
 
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		sp = getSharedPreferences("userinfo", MODE_PRIVATE);
+		if(!sp.getString("openid", "").equals("")){
+			loginname=sp.getString("openid", "");
+		}else {
+			loginname=sp.getString("loginname", "");
+		}
+		WindowManager wm = this.getWindowManager();
+		if (width <= 0) {
+			if (VideoMainActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+				height = wm.getDefaultDisplay().getWidth();
+				width = wm.getDefaultDisplay().getHeight();
 
+				LayoutParams layoutParams = ll2.getLayoutParams();
+				layoutParams.width = height;
+				layoutParams.height = width;
+				ll2.setLayoutParams(layoutParams);
+			} else {
+
+				width = wm.getDefaultDisplay().getWidth();
+				height = wm.getDefaultDisplay().getHeight();
+			}
+
+		}
+
+	}
+	
 	// 初始化
 
 	@SuppressWarnings("deprecation")
 	private void init() {
 		sp = getSharedPreferences("userinfo", MODE_PRIVATE);
-		loginname = sp.getString("loginname", "");
+		
+		if(!sp.getString("openid", "").equals("")){
+			loginname=sp.getString("openid", "");
+		}else {
+			loginname=sp.getString("loginname", "");
+		}
 		VID=getIntent().getStringExtra("VID");
-		vTitle=getIntent().getStringExtra("vTitle");
-		url=getIntent().getStringExtra("vURL");
+		/*vTitle=getIntent().getStringExtra("vTitle");
+		url=getIntent().getStringExtra("vURL");*/
 
 		mediaPlayer = new MediaPlayer(); // 创建一个播放器对象
 		update = new upDateSeekBar(); // 创建更新进度条对象
@@ -119,11 +157,58 @@ public class VideoMainActivity extends FinalActivity{
 		time = (TextView) findViewById(R.id.time);
 		nowtime = (TextView) findViewById(R.id.nowtime);
 		title = (TextView) findViewById(R.id.tv_vediotitle);
-		title.setText(vTitle);
+		
 		
 
 	}
+	int width, height;
+	// 横屏竖屏
 
+		@Override
+		public void onConfigurationChanged(Configuration newConfig) {
+
+			super.onConfigurationChanged(newConfig);
+			// 检测屏幕的方向：纵向或横向
+
+			// TODO Auto-generated method stub
+			if (VideoMainActivity.this.getResources().getConfiguration().orientation
+
+			== Configuration.ORIENTATION_LANDSCAPE) {
+				// 当前为横屏， 在此处添加额外的处理代码
+				ViewGroup.LayoutParams lp = ll2.getLayoutParams();
+				lp.width = height;
+				lp.height = width;
+				ll2.setLayoutParams(lp);
+				display = true;
+
+			}
+			else if (VideoMainActivity.this.getResources().getConfiguration().orientation
+
+					== Configuration.ORIENTATION_PORTRAIT) {
+
+						// 当前为竖屏， 在此处添加额外的处理代码
+
+						ViewGroup.LayoutParams lp = ll2.getLayoutParams();
+						lp.width = width;
+						lp.height = DipToPixels(this, 250);
+						;
+						ll2.setLayoutParams(lp);
+						display = true;
+
+					}
+
+			
+			new Handler().postDelayed(new Runnable() {
+
+				@Override
+				public void run() {
+					getwiandHeiht();
+				}
+			}, 100);
+
+		}
+
+	
 	// 播放视频的线程
 	class PlayMovie extends Thread {
 
@@ -140,7 +225,6 @@ public class VideoMainActivity extends FinalActivity{
 		public void run() {
 			Message message = Message.obtain();
 			try {
-				Log.i("hck", "runrun  " + url);
 				mediaPlayer.reset(); // 回复播放器默认
 				mediaPlayer.setDataSource(url); // 设置播放路径
 				mediaPlayer.setDisplay(pView.getHolder()); // 把视频显示在SurfaceView上
@@ -148,7 +232,6 @@ public class VideoMainActivity extends FinalActivity{
 				mediaPlayer.prepareAsync(); // 准备播放
 			} catch (Exception e) {
 				message.what = 2;
-				Log.e("hck", e.toString());
 			}
 
 			super.run();
@@ -185,7 +268,6 @@ public class VideoMainActivity extends FinalActivity{
 				return;
 			}
 			if (postSize > 0) { // 说明中途停止过（activity调用过stop方法，不是用户点击停止按钮），跳到停止时候位置开始播放
-				Log.i("hck", "seekTo ");
 				mediaPlayer.seekTo(postSize); // 跳到postSize大小位置处进行播放
 			}
 			new Thread(update).start(); // 启动线程，更新进度条
@@ -209,13 +291,11 @@ public class VideoMainActivity extends FinalActivity{
 						mediaPlayer.getDuration(); seekbar.setProgress(postSize *
 								sMax / mMax);
 
-						//seekbar.setProgress(mediaPlayer.getCurrentPosition());
 						pb.setVisibility(View.VISIBLE);
-			} else {
+			} 
 				
-				new PlayMovie(0, url).start(); // 表明是第一次开始播放
+				
 
-			}
 		}
 
 		@Override
@@ -390,6 +470,22 @@ public class VideoMainActivity extends FinalActivity{
 				super.onFailure(t, strMsg);
 				Toast.makeText(VideoMainActivity.this, strMsg, 0).show();
 			}
+			
+			
+
+			@Override
+			public void onStart() {
+				// TODO Auto-generated method stub
+				super.onStart();
+				if (mediaPlayer != null) {
+					mediaPlayer.stop();
+					flag = false;
+				}
+				pb.setVisibility(View.VISIBLE);
+				lltag.removeAllViews();
+			}
+
+
 
 			@Override
 			public void onSuccess(String t) {
@@ -406,6 +502,11 @@ public class VideoMainActivity extends FinalActivity{
 							joResult.getString("VideoTagData"),
 							new TypeToken<List<VideoTagData>>() {
 							}.getType());
+					
+					vTitle=ovm.get(0).getvTitle();
+					title.setText(vTitle);
+					url=ovm.get(0).getvURL();
+					new PlayMovie(0, url).start(); // 表明是第一次开始播放
 					if (ovm.get(0).getIsFavorite() != null
 							&& ovm.get(0).getIsFavorite().equals("1")) {
 						shoucang.setBackgroundResource(R.drawable.star);
@@ -566,6 +667,7 @@ public class VideoMainActivity extends FinalActivity{
 			mediaPlayer.release();
 			mediaPlayer = null;
 		}
+	 Toast.makeText(this, "destory", 0).show();
 
 	}
 
@@ -658,27 +760,19 @@ public class VideoMainActivity extends FinalActivity{
 					View v = getLayoutInflater().inflate(R.layout.tag, null);
 					TextView tagTextView = (TextView) v
 							.findViewById(R.id.textView1);
-					RelativeLayout ll_tag=(RelativeLayout) v.findViewById(R.id.ll_tag);
+					View view = v.findViewById(R.id.ll_tag);
 					tagTextView.setText(vtd.get(vtd.size() - 1 - i)
 							.getVtTagText());
-					ll_tag.setAnimation(animation);
+					v.setAnimation(animation);
 					final VideoTagData vv = vtd.get(vtd.size() - 1 - i);
 
 					lltag.addView(v);
-					v.setOnClickListener(new OnClickListener() {
+					view.setOnClickListener(new OnClickListener() {
 
 						@Override
 						public void onClick(View v) { // TODOAuto-generated
-														// method stub
-							Intent intent=new Intent(VideoMainActivity.this,
-									  VideoMainActivity.class);
-							intent.putExtra("VID", vv.getVideoID());
-							intent.putExtra("vTitle", vv.getVtTagText());
-							intent.putExtra("vURL", vv.getvURL());
-							  startActivity(intent);
-							 
-							  Toast.makeText(VideoMainActivity.this, "qq", 0).show();
-
+							GetVideoInfoByVID(vv.getVideoID(),loginname);				// method stub
+							
 						}
 					});
 
@@ -691,7 +785,19 @@ public class VideoMainActivity extends FinalActivity{
 
 	}
 
+	// dip转像素
+		public int DipToPixels(Context context, int dip) {
+			final float SCALE = context.getResources().getDisplayMetrics().density;
 
+			float valueDips = dip;
+			int valuePixels = (int) (valueDips * SCALE + 0.5f);
+
+			return valuePixels;
+
+		}
+		
+		
+		
 
 
 

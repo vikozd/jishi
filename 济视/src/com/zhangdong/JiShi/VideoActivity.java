@@ -53,6 +53,8 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.OrientationEventListener;
+import android.view.OrientationListener;
 import android.view.SurfaceHolder;
 import android.view.Window;
 import android.view.SurfaceHolder.Callback;
@@ -89,7 +91,6 @@ public class VideoActivity extends FragmentActivity implements
 	private ProgressBar pb; // ProgressBar
 	private upDateSeekBar update; // 更新进度条用
 	private ImageView imageView1, iv_back;// 放大缩小
-	private boolean b;// 竖false;横true
 	private TextView time, title, nowtime, viewtitle, viewdetail, playnum,
 			zannum;
 	private LinearLayout ll2, ll_top;
@@ -119,6 +120,7 @@ public class VideoActivity extends FragmentActivity implements
 	private ImageView shoucang, shoucang2, zanzan, zhuanfa, zhuanfa2;
 	boolean blsc;// false未被收藏
 	private Video video;
+	boolean b;// 按钮控制视屏状态；
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -130,6 +132,7 @@ public class VideoActivity extends FragmentActivity implements
 
 		init(); // 初始化数据
 		setListener(); // 绑定相关事件
+		
 
 	}
 
@@ -139,8 +142,14 @@ public class VideoActivity extends FragmentActivity implements
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
+		startListener();
+		Toast.makeText(this, "onResume", 0).show();
 		sp = getSharedPreferences("userinfo", MODE_PRIVATE);
-		loginname = sp.getString("loginname", "");
+		if (!sp.getString("openid", "").equals("")) {
+			loginname = sp.getString("openid", "");
+		} else {
+			loginname = sp.getString("loginname", "");
+		}
 		WindowManager wm = this.getWindowManager();
 		if (width <= 0) {
 			if (VideoActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -164,6 +173,21 @@ public class VideoActivity extends FragmentActivity implements
 	// 横屏竖屏
 
 	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		Toast.makeText(this, "onPause", 0).show();
+		if (mediaPlayer.isPlaying()) {
+			bt.setImageResource(R.drawable.movieplay);
+			mediaPlayer.pause();
+			flag = false;
+			postSize = mediaPlayer.getCurrentPosition();
+		}
+		mOrientationListener.disable();
+
+	}
+
+	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 
 		super.onConfigurationChanged(newConfig);
@@ -180,7 +204,6 @@ public class VideoActivity extends FragmentActivity implements
 			ll2.setLayoutParams(lp);
 			imageView1.setImageResource(R.drawable.minscreen);
 			display = true;
-			b = true;
 
 		}
 
@@ -197,10 +220,8 @@ public class VideoActivity extends FragmentActivity implements
 			ll2.setLayoutParams(lp);
 			display = true;
 			imageView1.setImageResource(R.drawable.maxscreen);
-			b = false;
 
 		}
-
 		new Handler().postDelayed(new Runnable() {
 
 			@Override
@@ -546,6 +567,8 @@ public class VideoActivity extends FragmentActivity implements
 		@Override
 		public void surfaceChanged(SurfaceHolder holder, int format, int width,
 				int height) {
+			Toast.makeText(VideoActivity.this, "surfaceChanged", 0).show();
+
 		}
 
 		@Override
@@ -553,14 +576,16 @@ public class VideoActivity extends FragmentActivity implements
 			if (postSize > 0 && url != null) { // 说明，停止过activity调用过pase方法，跳到停止位置播放
 				new PlayMovie(postSize, url).start();
 				flag = true;
-
 				int sMax = seekbar.getMax();
 				int mMax = mediaPlayer.getDuration();
 				seekbar.setProgress(postSize * sMax / mMax);
+				Toast.makeText(VideoActivity.this, "surfaceCreated 旧activity", 0).show();
 
 				// seekbar.setProgress(mediaPlayer.getCurrentPosition());
 				pb.setVisibility(View.VISIBLE);
 			} else {
+				Toast.makeText(VideoActivity.this, "surfaceCreated 新activity", 0).show();
+
 				video = listVideo.get(0);
 				VID = listVideo.get(0).getVID();
 				url = listVideo.get(0).getvURL();
@@ -597,37 +622,16 @@ public class VideoActivity extends FragmentActivity implements
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				if (!b) {
+				mClick = true;
+				if (!mIsLand) {
 					setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-					// 当前为横屏， 在此处添加额外的处理代码
-					/*
-					 * ViewGroup.LayoutParams lp = ll2.getLayoutParams();
-					 * lp.width=height; lp.height = width;
-					 * ll2.setLayoutParams(lp);
-					 * imageView1.setImageResource(R.drawable.minscreen);
-					 * display = true; b = true;
-					 */
-
-				}
-				// 横排
-				else {
+					mIsLand = true;
+					mClickLand = false;
+				} else {
 					setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-					/*
-					 * ViewGroup.LayoutParams lp = ll2.getLayoutParams();
-					 * lp.width=width; lp.height
-					 * =DipToPixels(VideoActivity.this,250);;
-					 * ll2.setLayoutParams(lp); display = true;
-					 * imageView1.setImageResource(R.drawable.maxscreen); b =
-					 * false;
-					 */
-
+					mIsLand = false;
+					mClickPort = false;
 				}
-
-				/*
-				 * new Handler().postDelayed(new Runnable() {
-				 * 
-				 * @Override public void run() { getwiandHeiht(); } }, 100);
-				 */
 
 			}
 		});
@@ -950,7 +954,7 @@ public class VideoActivity extends FragmentActivity implements
 	String secondsString;
 	String nowmintuesString;
 	String nowsecondsString;
-	int mintues,nowmintues,seconds,nowseconds;
+	int mintues, nowmintues, seconds, nowseconds;
 	Handler mHandler = new Handler() {
 		public void handleMessage(Message msg) {
 			if (mediaPlayer == null) {
@@ -967,37 +971,34 @@ public class VideoActivity extends FragmentActivity implements
 				 * nowtime.setText(position / 3600000 + ":" + position % 3600000
 				 * / 60000 + ":" + position % 3600000 % 60000 / 1000);
 				 */
-				 mintues=mMax % 3600000 / 60000;
-				 seconds=mMax % 3600000
-						% 60000 / 1000;
-				 nowmintues=position % 3600000
-							/ 60000;
-				 nowseconds=position % 3600000 % 60000 / 1000;
-				
-				if(mintues>=10){
-					mintuesString=mintues+"";
-				}else {
-					mintuesString="0"+mintues;
-				}
-				if(seconds>=10){
-					secondsString=seconds+"";
-				}else{
-					secondsString="0"+seconds;
-				}
-				
-				if(nowmintues>=10){
-					nowmintuesString=nowmintues+"";
-				}else {
-					nowmintuesString="0"+nowmintues;
-				}
-				if(nowseconds>=10){
-					nowsecondsString=nowseconds+"";
-				}else{
-					nowsecondsString="0"+nowseconds;
-				}
-				time.setText(mintuesString + ":" +secondsString);
-				nowtime.setText(nowmintuesString + ":" + nowsecondsString);
+				mintues = mMax % 3600000 / 60000;
+				seconds = mMax % 3600000 % 60000 / 1000;
+				nowmintues = position % 3600000 / 60000;
+				nowseconds = position % 3600000 % 60000 / 1000;
 
+				if (mintues >= 10) {
+					mintuesString = mintues + "";
+				} else {
+					mintuesString = "0" + mintues;
+				}
+				if (seconds >= 10) {
+					secondsString = seconds + "";
+				} else {
+					secondsString = "0" + seconds;
+				}
+
+				if (nowmintues >= 10) {
+					nowmintuesString = nowmintues + "";
+				} else {
+					nowmintuesString = "0" + nowmintues;
+				}
+				if (nowseconds >= 10) {
+					nowsecondsString = nowseconds + "";
+				} else {
+					nowsecondsString = "0" + nowseconds;
+				}
+				time.setText(mintuesString + ":" + secondsString);
+				nowtime.setText(nowmintuesString + ":" + nowsecondsString);
 
 			}
 		};
@@ -1022,6 +1023,8 @@ public class VideoActivity extends FragmentActivity implements
 			mediaPlayer.release();
 			mediaPlayer = null;
 		}
+		Toast.makeText(this, "onDestroy", 0).show();
+		
 
 	}
 
@@ -1089,7 +1092,7 @@ public class VideoActivity extends FragmentActivity implements
 					.getStreamVolume(AudioManager.STREAM_MUSIC));
 			return true;
 		case KeyEvent.KEYCODE_BACK:
-			if (b == true) {
+			if (mIsLand == true) {
 				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 				/**
 				 * 设置播放为非全屏
@@ -1098,7 +1101,7 @@ public class VideoActivity extends FragmentActivity implements
 				lp.height = 0;
 				ll2.setLayoutParams(lp);
 				display = true;
-				b = false;
+				mIsLand = false;
 
 			} else {
 				this.finish();
@@ -1149,7 +1152,7 @@ public class VideoActivity extends FragmentActivity implements
 	protected void onStop() {
 		// TODO Auto-generated method stub
 		super.onStop();
-		// lltag.removeAllViews();
+		Toast.makeText(VideoActivity.this, "onStop", 0).show();
 	}
 
 	private void showShare(Video v) {
@@ -1215,7 +1218,7 @@ public class VideoActivity extends FragmentActivity implements
 
 	void showViewTag() {
 		int position = mediaPlayer.getCurrentPosition();
-
+		Animation animation=AnimationUtils.loadAnimation(getApplicationContext(), R.anim.in_from_right);
 		if (vtd != null && vtd.size() > 0) {
 
 			for (i = 0; i < vtd.size(); i++) {
@@ -1227,13 +1230,14 @@ public class VideoActivity extends FragmentActivity implements
 					View v = getLayoutInflater().inflate(R.layout.tag, null);
 					TextView tagTextView = (TextView) v
 							.findViewById(R.id.textView1);
+					View view = v.findViewById(R.id.ll_tag);
 					tagTextView.setText(vtd.get(vtd.size() - 1 - i)
 							.getVtTagText());
 
 					final VideoTagData vv = vtd.get(vtd.size() - 1 - i);
-
+					v.setAnimation(animation);
 					lltag.addView(v);
-					v.setOnClickListener(new OnClickListener() {
+					view.setOnClickListener(new OnClickListener() {
 
 						@Override
 						public void onClick(View v) { // TODOAuto-generated
@@ -1241,15 +1245,10 @@ public class VideoActivity extends FragmentActivity implements
 							Intent intent = new Intent(VideoActivity.this,
 									VideoMainActivity.class);
 							intent.putExtra("VID", vv.getVideoID());
-							intent.putExtra("vTitle", vv.getVtTagText());
-							intent.putExtra("vURL", vv.getvURL());
 							startActivity(intent);
-
 						}
 					});
-
 					vtd.remove(vtd.size() - 1 - i);
-
 				}
 			}
 
@@ -1266,6 +1265,68 @@ public class VideoActivity extends FragmentActivity implements
 
 		return valuePixels;
 
+	}
+
+	/**
+	 * 开启监听器
+	 */
+	private boolean mIsLand = false; // 是否是横屏
+	private boolean mClick = false; // 是否点击
+	private boolean mClickLand = true; // 点击进入横屏
+	private boolean mClickPort = true; // 点击进入竖屏
+	private OrientationEventListener mOrientationListener; // 屏幕方向改变监听器
+	private final void startListener() {
+		mOrientationListener = new OrientationEventListener(this) {
+			@Override
+			public void onOrientationChanged(int rotation) {
+				// 设置竖屏
+				Log.v("qq", rotation + "");
+
+				if (((rotation >= 0) && (rotation <= 45))
+						|| ((rotation > 135) && (rotation < 225))
+						|| ((rotation > 315) && (rotation < 360))) {
+					if (mClick) {
+						if (mIsLand && !mClickLand) {
+							return;
+						} else {
+							mClickPort = true;
+							mClick = false;
+							mIsLand = false;
+						}
+					} else {
+						if (mIsLand) {
+							setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+							mIsLand = false;
+							mClick = false;
+						}
+					}
+				}
+
+				// 横屏
+
+				if (((rotation > 45) && (rotation <= 135))
+						|| ((rotation >= 225) && (rotation <= 315))) {
+					if (mClick) {
+						if (!mIsLand && !mClickPort) {
+							return;
+						} else {
+							mClickLand = true;
+							mClick = false;
+							mIsLand = true;
+						}
+					} else {
+						if (!mIsLand) {
+							setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+							mIsLand = true;
+							mClick = false;
+						}
+					}
+				}
+
+			}
+
+		};
+		mOrientationListener.enable();
 	}
 
 }

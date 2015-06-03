@@ -36,16 +36,22 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 
 public class SeeHistoryActivity extends FinalActivity {
-	private FinalHttp http;
+	private SharedPreferences sp;
 	private String loginname;
+	private Editor editor;
+	private FinalHttp http;
 	private String datajson="";
+	@ViewInject(id =R.id.tv_nodata) TextView tv_nodata;
+	@ViewInject(id =R.id.progressbar) View progressView;
 	@ViewInject(id=R.id.lv_history) SwipeListView lv_history;
 	private MyListInHistoryAdapter myListInHistoryAdapter=null;
 	private List<MyHistory> ll;
 
-	
+
 
 	@ViewInject(id=R.id.rl_clear,click="rl_clear_click") RelativeLayout rl_clear;
 	public void rl_clear_click(View v) {
@@ -86,10 +92,11 @@ public class SeeHistoryActivity extends FinalActivity {
 								e.printStackTrace();
 							}
 							if(Error.equals("false")){
+								tv_nodata.setVisibility(View.VISIBLE);
 								Toast.makeText(getApplicationContext(), ErrorDesc, Toast.LENGTH_SHORT).show();
 								lv_history.setAdapter(null);
 								myListInHistoryAdapter.notifyDataSetChanged();
-								
+
 							}
 						}
 
@@ -118,18 +125,18 @@ public class SeeHistoryActivity extends FinalActivity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_seehistory);
+		sp=this.getSharedPreferences("userinfo",MODE_PRIVATE);
+		editor = sp.edit();
+		if(!sp.getString("openid", "").equals("")){
+			loginname=sp.getString("openid", "");
+		}else {
+			loginname=sp.getString("loginname", "");
+		}
+
 		http=new FinalHttp();
-		Intent it=this.getIntent();
-		loginname = it.getStringExtra("loginname");
+
 		initListView();
-		TextView emptyView = new TextView(getApplicationContext());  
-        emptyView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));  
-        emptyView.setText("暂无数据!");  
-        emptyView.setTextSize(17);
-        emptyView.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
-        emptyView.setVisibility(View.GONE);  
-        ((ViewGroup)lv_history.getParent()).addView(emptyView);  
-        lv_history.setEmptyView(emptyView);
+
 	}
 
 
@@ -144,51 +151,55 @@ public class SeeHistoryActivity extends FinalActivity {
 			@Override
 			public void onFailure(Throwable t, String strMsg) {
 				super.onFailure(t, strMsg);
+				progressView.setVisibility(View.GONE);
+			}
+
+			@Override
+			public void onStart() {
+				// TODO Auto-generated method stub
+				super.onStart();
+				progressView.setVisibility(View.VISIBLE);
 			}
 
 			@Override
 			public void onSuccess(String t) {
 				super.onSuccess(t);
-
 				String jsonString=XmlAndJson.cc(t);
 				try {
 					JSONObject jsonObject1 = new JSONObject(jsonString);
-					datajson  = jsonObject1.getString("Data");
-					ll=new ArrayList<MyHistory>();
-					JSONArray jsonArray = new JSONArray(datajson);
-					for(int i = 0; i < jsonArray.length(); i++) {
-						JSONObject jsonObject = jsonArray.getJSONObject(i);
-						//						String vPreviewImageURL = jsonObject.getString("vPreviewImageURL");
-						String vTitle=jsonObject.getString("vTitle");
-						String vURL = jsonObject.getString("vURL");
-						String VID=jsonObject.getString("VID");
-						String UHID=jsonObject.getString("UHID");
-						MyHistory myHistory = new MyHistory(vTitle,vURL, VID,UHID);
-						ll.add(myHistory);
+
+					if(jsonObject1.getString("ErrorDesc")!=null && !jsonObject1.getString("ErrorDesc").equals("") ){
+						tv_nodata.setVisibility(View.VISIBLE);
+					}else {
+						datajson  = jsonObject1.getString("Data");
+						ll=new ArrayList<MyHistory>();
+						JSONArray jsonArray = new JSONArray(datajson);
+						for(int i = 0; i < jsonArray.length(); i++) {
+							JSONObject jsonObject = jsonArray.getJSONObject(i);
+							//						String vPreviewImageURL = jsonObject.getString("vPreviewImageURL");
+							String vTitle=jsonObject.getString("vTitle");
+							String vURL = jsonObject.getString("vURL");
+							String VID=jsonObject.getString("VID");
+							String UHID=jsonObject.getString("UHID");
+							MyHistory myHistory = new MyHistory(vTitle,vURL, VID,UHID);
+							ll.add(myHistory);
+						}
+						
+						if(ll.size()>0)		
+						{			
+							myListInHistoryAdapter=new MyListInHistoryAdapter(getApplicationContext(),ll,lv_history.getRightViewWidth());
+							lv_history.setAdapter(myListInHistoryAdapter);
+							
+							ListViewClickListenr listViewClickListenr=new ListViewClickListenr();
+							lv_history.setOnItemClickListener(listViewClickListenr);
+							
+							ListViewOnRightItemClickListener listViewOnRightItemClickListener=new ListViewOnRightItemClickListener();
+							myListInHistoryAdapter.setOnRightItemClickListener(listViewOnRightItemClickListener);
+						}
+						
+						
 					}
-
-					if(ll.size()>0)		
-					{			
-						myListInHistoryAdapter=new MyListInHistoryAdapter(getApplicationContext(),ll,lv_history.getRightViewWidth());
-						lv_history.setAdapter(myListInHistoryAdapter);
-
-						ListViewClickListenr listViewClickListenr=new ListViewClickListenr();
-						lv_history.setOnItemClickListener(listViewClickListenr);
-
-						ListViewOnRightItemClickListener listViewOnRightItemClickListener=new ListViewOnRightItemClickListener();
-						myListInHistoryAdapter.setOnRightItemClickListener(listViewOnRightItemClickListener);
-					}
-//					if(ll.size()==0)
-//					{
-//						TextView emptyView = new TextView(getApplicationContext());  
-//                        emptyView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));  
-//                        emptyView.setText("暂无数据！");  
-//                        emptyView.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
-//                        emptyView.setVisibility(View.GONE);  
-//                        ((ViewGroup)lv_history.getParent()).addView(emptyView);  
-//                        lv_history.setEmptyView(emptyView);
-//					}
-
+					progressView.setVisibility(View.GONE);
 				}catch (JSONException e) {
 					e.printStackTrace();
 				}
@@ -265,10 +276,13 @@ public class SeeHistoryActivity extends FinalActivity {
 			});
 			lv_history.deleteItem(lv_history.getChildAt(position));
 			ll.remove(position);
+			if(ll.size()<1){
+				tv_nodata.setVisibility(View.VISIBLE);
+			}
 			myListInHistoryAdapter.notifyDataSetChanged();
-			
-				
-			
+
+
+
 		}
 
 	}

@@ -26,33 +26,34 @@ import android.os.Bundle;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.view.Gravity;
+import android.content.SharedPreferences;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Toast;
 
 public class MyFavoritesActivity extends FinalActivity implements OnPreparedListener{
+	Toast toast;
+	private SharedPreferences sp;
 	private String loginname;
 	private FinalHttp http;
 	private MyListInFavoritesAdapter myListInFavoritesAdapter;
 	List<MyFavorites> ll=null;
 	private String datajson="";
+	@ViewInject(id =R.id.tv_nodata) TextView tv_nodata;
 	@ViewInject(id =R.id.lv_myfavorites) SwipeListView lv_myfavorites;
-	@ViewInject(id =R.id.pb) ProgressBar pb;
-	@ViewInject(id =R.id.ll_loading) LinearLayout ll_loading;
+	@ViewInject(id =R.id.progressbar) View progressView;
 	@ViewInject(id=R.id.rl_clear,click="rl_clear_click") RelativeLayout rl_clear;
 	public void rl_clear_click(View v) {
 		if(ll.size()==0){
-			Toast.makeText(getApplicationContext(), "无数据", Toast.LENGTH_SHORT).show();
+			if(toast == null)
+				toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_SHORT);
+			toast.setText("无数据");
+			toast.show();
 		}else {
 			new AlertDialog.Builder(this).setTitle("是否清空？")  
 			.setIcon(android.R.drawable.ic_dialog_info)  
@@ -87,7 +88,12 @@ public class MyFavoritesActivity extends FinalActivity implements OnPreparedList
 								e.printStackTrace();
 							}
 							if(Error.equals("false")){
-								Toast.makeText(getApplicationContext(), ErrorDesc, Toast.LENGTH_SHORT).show();
+								tv_nodata.setVisibility(View.VISIBLE);
+								
+								if(toast == null)
+									toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_SHORT);
+								toast.setText(ErrorDesc);
+								toast.show();
 								lv_myfavorites.setAdapter(null);
 								myListInFavoritesAdapter.notifyDataSetChanged();
 
@@ -110,7 +116,7 @@ public class MyFavoritesActivity extends FinalActivity implements OnPreparedList
 
 	@ViewInject(id=R.id.bnt_edit,click="bnt_edit_click") Button bnt_edit;
 	public void bnt_edit_click(View v){
-		
+
 	}
 
 	@ViewInject(id=R.id.bnt_back,click="bnt_back_click") Button bnt_back;
@@ -123,32 +129,29 @@ public class MyFavoritesActivity extends FinalActivity implements OnPreparedList
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_myfavorites);
-		Intent it=this.getIntent();
-		loginname = it.getStringExtra("loginname");
+		sp=this.getSharedPreferences("userinfo",MODE_PRIVATE);
+		if(!sp.getString("openid", "").equals("")){
+			loginname=sp.getString("openid", "");
+		}else {
+			loginname=sp.getString("loginname", "");
+		}
 		http=new FinalHttp();
 		//initListView();
-		TextView emptyView = new TextView(getApplicationContext());  
-		emptyView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));  
-		emptyView.setText("暂无数据!");  
-		emptyView.setTextSize(17);
-		emptyView.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL);
-		emptyView.setVisibility(View.GONE);  
-		((ViewGroup)lv_myfavorites.getParent()).addView(emptyView);  
-		lv_myfavorites.setEmptyView(emptyView);
+
 	}
-	
-	
+
+
 
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
 		if(ll!=null&&ll.size()>0){
-		ll.clear();
+			ll.clear();
 		}
 		initListView();
-		
-		
+
+
 	}
 
 	private void initListView(){
@@ -160,6 +163,14 @@ public class MyFavoritesActivity extends FinalActivity implements OnPreparedList
 			@Override
 			public void onFailure(Throwable t, String strMsg) {
 				super.onFailure(t, strMsg);
+				progressView.setVisibility(View.GONE);
+			}
+
+			@Override
+			public void onStart() {
+				// TODO Auto-generated method stub
+				super.onStart();
+				progressView.setVisibility(View.VISIBLE);
 			}
 
 			@Override
@@ -168,35 +179,40 @@ public class MyFavoritesActivity extends FinalActivity implements OnPreparedList
 				String jsonString=XmlAndJson.cc(t);
 				try {
 					JSONObject jsonObject1 = new JSONObject(jsonString);
-					datajson  = jsonObject1.getString("Data");
-					ll=new ArrayList<MyFavorites>();
-					JSONArray jsonArray = new JSONArray(datajson);
-					for(int i = 0; i < jsonArray.length(); i++) {
-						JSONObject jsonObject = jsonArray.getJSONObject(i);
-						String VID=jsonObject.getString("VID");
-						String UFID=jsonObject.getString("UFID");
-						String vTitle=jsonObject.getString("vTitle");
-						String vURL = jsonObject.getString("vURL");
-						String vPreviewImageURL = jsonObject.getString("vPreviewImageURL");
-						String vDoctorName = jsonObject.getString("vDoctorName");
-						String vDoctorDepartment = jsonObject.getString("vDoctorDepartment");
-						String vDoctorHospital = jsonObject.getString("vDoctorHospital");
-						MyFavorites myFavorites = new MyFavorites(vPreviewImageURL,vTitle,vURL, VID,UFID,vDoctorName,vDoctorDepartment,vDoctorHospital);
-						ll.add(myFavorites);
-					}
-					if(ll.size()>0)		
-					{
-						myListInFavoritesAdapter=new MyListInFavoritesAdapter(getApplicationContext(),ll,lv_myfavorites.getRightViewWidth());
-						lv_myfavorites.setAdapter(myListInFavoritesAdapter);
-						myListInFavoritesAdapter.notifyDataSetChanged();
+					if(jsonObject1.getString("ErrorDesc")!=null && !jsonObject1.getString("ErrorDesc").equals("") ){
+						tv_nodata.setVisibility(View.VISIBLE);
+					}else {
+						datajson  = jsonObject1.getString("Data");
+						ll=new ArrayList<MyFavorites>();
+						JSONArray jsonArray = new JSONArray(datajson);
+						for(int i = 0; i < jsonArray.length(); i++) {
+							JSONObject jsonObject = jsonArray.getJSONObject(i);
+							String VID=jsonObject.getString("VID");
+							String UFID=jsonObject.getString("UFID");
+							String vTitle=jsonObject.getString("vTitle");
+							String vURL = jsonObject.getString("vURL");
+							String vPreviewImageURL = jsonObject.getString("vPreviewImageURL");
+							String vDoctorName = jsonObject.getString("vDoctorName");
+							String vDoctorDepartment = jsonObject.getString("vDoctorDepartment");
+							String vDoctorHospital = jsonObject.getString("vDoctorHospital");
+							MyFavorites myFavorites = new MyFavorites(vPreviewImageURL,vTitle,vURL, VID,UFID,vDoctorName,vDoctorDepartment,vDoctorHospital);
+							ll.add(myFavorites);
+						}
+						if(ll.size()>0)		
+						{
+							myListInFavoritesAdapter=new MyListInFavoritesAdapter(getApplicationContext(),ll,lv_myfavorites.getRightViewWidth());
+							lv_myfavorites.setAdapter(myListInFavoritesAdapter);
+							myListInFavoritesAdapter.notifyDataSetChanged();
 
-						ListViewClickListenr listViewClickListenr=new ListViewClickListenr();
-						lv_myfavorites.setOnItemClickListener(listViewClickListenr);
+							ListViewClickListenr listViewClickListenr=new ListViewClickListenr();
+							lv_myfavorites.setOnItemClickListener(listViewClickListenr);
 
-						ListViewOnRightItemClickListener listViewOnRightItemClickListener=new ListViewOnRightItemClickListener();
-						myListInFavoritesAdapter.setOnRightItemClickListener(listViewOnRightItemClickListener);
+							ListViewOnRightItemClickListener listViewOnRightItemClickListener=new ListViewOnRightItemClickListener();
+							myListInFavoritesAdapter.setOnRightItemClickListener(listViewOnRightItemClickListener);
+						}
 					}
-					
+					progressView.setVisibility(View.GONE);
+
 				}catch (JSONException e) {
 					e.printStackTrace();
 				}
@@ -211,8 +227,8 @@ public class MyFavoritesActivity extends FinalActivity implements OnPreparedList
 				long arg3) {
 			String VID = ll.get(arg2).getVID();
 			String UFID=ll.get(arg2).getUFID();
-		    String vTitle=ll.get(arg2).getvTitle();
-		    String vURL=ll.get(arg2).getvURL();
+			String vTitle=ll.get(arg2).getvTitle();
+			String vURL=ll.get(arg2).getvURL();
 			Intent intent=new Intent();	
 			intent.putExtra("VID", VID);
 			intent.putExtra("UHID", UFID);
@@ -259,14 +275,19 @@ public class MyFavoritesActivity extends FinalActivity implements OnPreparedList
 						e.printStackTrace();
 					}
 					if(Error.equals("false")){
-						Toast.makeText(getApplicationContext(), ErrorDesc, Toast.LENGTH_SHORT).show();
-
+						if(toast == null)
+							toast = Toast.makeText(getApplicationContext(), "", Toast.LENGTH_SHORT);
+						toast.setText(ErrorDesc);
+						toast.show();
 					}
 				}
 
 			});
 			lv_myfavorites.deleteItem(lv_myfavorites.getChildAt(position));
 			ll.remove(position);
+			if(ll.size()<1){
+				tv_nodata.setVisibility(View.VISIBLE);
+			}
 			myListInFavoritesAdapter.notifyDataSetChanged();
 
 
@@ -277,8 +298,6 @@ public class MyFavoritesActivity extends FinalActivity implements OnPreparedList
 	@Override
 	public void onPrepared(MediaPlayer arg0) {
 		// TODO Auto-generated method stub
-		pb.setVisibility(View.GONE);
-		ll_loading.setVisibility(View.GONE);
 	}
 
 

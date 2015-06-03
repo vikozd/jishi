@@ -80,7 +80,11 @@ public class Frag1 extends Fragment {
 		@Override
 		public int getCount() {
 			// TODO Auto-generated method stub
+			if(listVideo!=null){
 			return listVideo.size();
+			}else{
+				return 0;
+			}
 		}
 
 		@Override

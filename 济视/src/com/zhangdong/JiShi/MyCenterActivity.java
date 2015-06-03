@@ -93,8 +93,13 @@ public class MyCenterActivity extends FinalActivity {
 		setContentView(R.layout.activity_my_center);
 		sp=this.getSharedPreferences("userinfo",MODE_PRIVATE);
 		editor = sp.edit();
-		loginname=sp.getString("loginname", "");
-		tv_loginname.setText(loginname);
+		if(!sp.getString("openid", "").equals("")){
+			loginname=sp.getString("nickname", "");
+			tv_loginname.setText(loginname);			
+		}else {
+			loginname=sp.getString("loginname", "");
+			tv_loginname.setText(loginname);	
+		}
 		
 		
 	}

@@ -54,7 +54,19 @@
             
             sp:right_width="90dp" >
         </com.zhangdong.JiShi.Tools.SwipeListView>
-       
+        <include
+            android:id="@+id/progressbar"
+            layout="@layout/progressbar" />
+        <TextView
+            android:id="@+id/tv_nodata"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="11dp"
+            android:visibility="gone"
+            android:text="暂无数据！"
+            android:textColor="@color/gray"
+            android:textSize="17sp" />
     </FrameLayout>
 
     <View

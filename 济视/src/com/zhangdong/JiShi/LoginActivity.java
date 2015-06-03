@@ -200,8 +200,8 @@ public class LoginActivity extends FinalActivity {
 							String t1=t.substring(86, 91);
 							if(t1.equals("false")){
 								editor.putString("openid", openid);
-								editor.putString("loginname", nickname);
-								editor.putString("loginpass", null);
+								editor.putString("nickname", nickname);
+//								editor.putString("loginpass", null);
 								editor.commit();
 								Toast.makeText(mContext, "登录成功", Toast.LENGTH_SHORT).show();
 								SpeechApp.resp2=null;

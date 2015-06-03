@@ -65,29 +65,19 @@
             sp:right_width="120dp" >
         </com.zhangdong.JiShi.Tools.SwipeListView>
 
-        <LinearLayout
-            android:id="@+id/ll_loading"
+        <include
+            android:id="@+id/progressbar"
+            layout="@layout/progressbar" />
+        <TextView
+            android:id="@+id/tv_nodata"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
+            android:layout_gravity="center"
+            android:padding="11dp"
             android:visibility="gone"
-            android:layout_gravity="center" >
-
-            <ProgressBar
-                android:id="@+id/pb"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                 />
-
-            <TextView
-                android:id="@+id/loading"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="加载中" />
-
-        </LinearLayout>
+            android:text="暂无数据！"
+            android:textColor="@color/gray"
+            android:textSize="17sp" />
     </FrameLayout>
 
     <View

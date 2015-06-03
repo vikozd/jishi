@@ -75,7 +75,11 @@ public class Frag2 extends Fragment {
 		@Override
 		public int getCount() {
 			// TODO Auto-generated method stub
-			return listVideo.size();
+			if(listVideo!=null){
+				return listVideo.size();
+				}else{
+					return 0;
+				}
 		}
 
 		@Override

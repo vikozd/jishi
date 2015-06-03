@@ -17,8 +17,8 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:padding="11dp"
-            android:text="人体图"
-            android:textColor="@color/gray_red"
+            android:text="人体部位"
+            android:textColor="@color/black"
             android:textSize="17sp" />
 
         <Button

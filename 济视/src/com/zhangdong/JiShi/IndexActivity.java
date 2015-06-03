@@ -29,6 +29,8 @@ import net.tsz.afinal.FinalHttp;
 import net.tsz.afinal.http.AjaxCallBack;
 import net.tsz.afinal.http.AjaxParams;
 
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Environment;
 import android.R.integer;
@@ -45,6 +47,7 @@ import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -181,22 +184,30 @@ public class IndexActivity extends FinalActivity implements OnClickListener {
 
 			@Override
 			public boolean onLongClick(View v) {
-				rll.setVisibility(View.VISIBLE);
-				mIatResults.clear();
-				mResultText.setText("");
-				showhide(0);
-				// 设置参数
-				setParam();
-				mTextView.setText("");
-				img7.setVisibility(View.GONE);
-				ret = mIat.startListening(recognizerListener);
-				if (ret != ErrorCode.SUCCESS) {
-					showTip("听写失败,错误码：" + ret);
-					// finishWork();
+				if (!isConnect(IndexActivity.this)) {
+					showTip("检查网络");
+
 				} else {
-					showTip(getString(R.string.text_begin));
+
+					rll.setVisibility(View.VISIBLE);
+					mIatResults.clear();
+					mResultText.setText("");
+					showhide(0);
+					// 设置参数
+					setParam();
+					mTextView.setText("");
+					img7.setVisibility(View.GONE);
+					ret = mIat.startListening(recognizerListener);
+					if (ret != ErrorCode.SUCCESS) {
+						showTip("听写失败,错误码：" + ret);
+						// finishWork();
+					} else {
+						showTip(getString(R.string.text_begin));
+					}
+
 				}
 				return false;
+
 			}
 		});
 		bt1.setOnTouchListener(new OnTouchListener() {
@@ -287,7 +298,7 @@ public class IndexActivity extends FinalActivity implements OnClickListener {
 			// Tips：
 			// 错误码：10118(您没有说话)，可能是录音机权限被禁，需要提示用户打开应用的录音权限。
 			// 如果使用本地功能（语音+）需要提示用户开启语音+的录音权限。
-			showTip(error.getPlainDescription(true));
+			// showTip(error.getPlainDescription(true));
 			// finishWork();
 			showhide(1);
 			mResultText.setText("你没有说任何话");
@@ -374,7 +385,9 @@ public class IndexActivity extends FinalActivity implements OnClickListener {
 			mResultText.setVisibility(View.GONE);
 			show.setVisibility(View.VISIBLE);
 		} else {
-			animDance.stop();
+			if (animDance != null) {
+				animDance.stop();
+			}
 			linear1.setVisibility(View.VISIBLE);
 			linear2.setVisibility(View.GONE);
 			mResultText.setVisibility(View.VISIBLE);
@@ -454,8 +467,10 @@ public class IndexActivity extends FinalActivity implements OnClickListener {
 
 		// 设置听写结果是否结果动态修正，为“1”则在听写过程中动态递增地返回结果，否则只在听写结束之后返回最终结果
 		// 注：该参数暂时只对在线听写有效
-		mIat.setParameter(SpeechConstant.ASR_DWA,
-				mSharedPreferences.getString("iat_dwa_preference", "1"));
+		/*
+		 * mIat.setParameter(SpeechConstant.ASR_DWA,
+		 * mSharedPreferences.getString("iat_dwa_preference", "1"));
+		 */
 
 	}
 
@@ -472,7 +487,12 @@ public class IndexActivity extends FinalActivity implements OnClickListener {
 		FlowerCollector.onResume(IndexActivity.this);
 		FlowerCollector.onPageStart(TAG);
 		sp = getSharedPreferences("userinfo", MODE_PRIVATE);
-		loginname = sp.getString("loginname", "");
+		if (!sp.getString("openid", "").equals("")) {
+			loginname = sp.getString("nickname", "");
+		} else {
+			loginname = sp.getString("loginname", "");
+		}
+
 		super.onResume();
 	}
 
@@ -631,6 +651,48 @@ public class IndexActivity extends FinalActivity implements OnClickListener {
 					}
 
 				});
+
+	}
+
+	public static boolean isConnect(Context context) {
+
+		// 获取手机所有连接管理对象（包括对wi-fi,net等连接的管理）
+
+		try {
+
+			ConnectivityManager connectivity = (ConnectivityManager) context
+
+			.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+			if (connectivity != null) {
+
+				// 获取网络连接管理的对象
+
+				NetworkInfo info = connectivity.getActiveNetworkInfo();
+
+				if (info != null && info.isConnected()) {
+
+					// 判断当前网络是否已经连接
+
+					if (info.getState() == NetworkInfo.State.CONNECTED) {
+
+						return true;
+
+					}
+
+				}
+
+			}
+
+		} catch (Exception e) {
+
+			// TODO: handle exception
+
+			Log.v("error", e.toString());
+
+		}
+
+		return false;
 
 	}
 
