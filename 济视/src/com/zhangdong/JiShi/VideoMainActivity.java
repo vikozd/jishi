@@ -667,7 +667,6 @@ public class VideoMainActivity extends FinalActivity{
 			mediaPlayer.release();
 			mediaPlayer = null;
 		}
-	 Toast.makeText(this, "destory", 0).show();
 
 	}
 
