@@ -14,6 +14,8 @@ import com.zhangdong.util.Video;
 
 import android.support.v4.app.Fragment;
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -35,20 +37,25 @@ public class Frag1 extends Fragment {
 	LayoutInflater inflater;
 	List<Video> listVideo;
 	TextView title, vDoctorName, vDoctorDepartment, vDoctorHospital;
+	Bitmap bitmap;
 	@Override
 	public void onAttach(Activity activity) {
 		// TODO Auto-generated method stub
 		this.activity = (VideoActivity) activity;
+		bitmap = BitmapFactory.decodeResource(activity.getResources(),
+				R.drawable.nopic);
 		super.onAttach(activity);
 	}
 
 	public void getListVideo(List<Video> listVideo) {
 		this.listVideo = listVideo;
 	}
-	
-   public interface PlayOther{
+
+	public interface PlayOther {
 		void playotherMovie(Video v);
 	}
+
+	
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -66,7 +73,7 @@ public class Frag1 extends Fragment {
 					int position, long id) {
 				// TODO Auto-generated method stub
 				Video v = (Video) listview.getItemAtPosition(position);
-				PlayOther po=activity;
+				PlayOther po = activity;
 				po.playotherMovie(v);
 
 			}
@@ -80,9 +87,9 @@ public class Frag1 extends Fragment {
 		@Override
 		public int getCount() {
 			// TODO Auto-generated method stub
-			if(listVideo!=null){
-			return listVideo.size();
-			}else{
+			if (listVideo != null) {
+				return listVideo.size();
+			} else {
 				return 0;
 			}
 		}
@@ -108,10 +115,9 @@ public class Frag1 extends Fragment {
 				convertView = inflater.inflate(R.layout.title, null);
 			}
 			ImageView img = (ImageView) convertView.findViewById(R.id.viewpic);
-			if (v.getvPreviewImageURL() != null
-					&& !"".equals(v.getvPreviewImageURL())) {
-				fb.display(img, v.getvPreviewImageURL());
-			}
+
+			fb.display(img, v.getvPreviewImageURL(), null, bitmap);
+
 			title = (TextView) convertView.findViewById(R.id.vTitle);
 			title.setText(v.getvTitle().toString());
 			vDoctorName = (TextView) convertView.findViewById(R.id.vDoctorName);
