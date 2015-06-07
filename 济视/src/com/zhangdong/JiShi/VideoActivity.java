@@ -46,6 +46,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -83,7 +84,7 @@ public class VideoActivity extends FragmentActivity implements
 	private SurfaceView pView; // 绘图容器对象，用于把视频显示在屏幕上
 	private String url; // 视频播放地址
 	private MediaPlayer mediaPlayer; // 播放器控件
-	private int postSize; // 保存义播视频位子
+	private int postSize; // 保存视频位子
 	private SeekBar seekbar; // 进度条控件
 	private boolean flag = false; // 用于判断视频是否在播放中
 	private LinearLayout ll, ll0, lltag;
@@ -121,6 +122,7 @@ public class VideoActivity extends FragmentActivity implements
 	boolean blsc;// false未被收藏
 	private Video video;
 	boolean b;// 按钮控制视屏状态；
+	Fragment from;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -132,7 +134,6 @@ public class VideoActivity extends FragmentActivity implements
 
 		init(); // 初始化数据
 		setListener(); // 绑定相关事件
-		
 
 	}
 
@@ -226,7 +227,7 @@ public class VideoActivity extends FragmentActivity implements
 			public void run() {
 				getwiandHeiht();
 			}
-		}, 100);
+		}, 10);
 
 	}
 
@@ -334,30 +335,55 @@ public class VideoActivity extends FragmentActivity implements
 	}
 
 	public void switchFragment(int fg) {
-
 		FragmentManager fm = getSupportFragmentManager();
-		FragmentTransaction tran = fm.beginTransaction();
+		FragmentTransaction transaction = fm.beginTransaction();
 		switch (fg) {
 		case 1:
-			tran.replace(R.id.frag, fg1);
-			fg1.getListVideo(listVideo1);
+			// tran.replace(R.id.frag, fg1);
+			// switchContent(from,fg1);
+			if (!fg1.isAdded()) { // 先判断是否被add过
+				transaction.hide(from).add(R.id.frag, fg1).commit(); // 隐藏当前的fragment，add下一个到Activity中
+				fg1.getListVideo(listVideo1);
+			} else {
+				transaction.hide(from).show(fg1).commit(); // 隐藏当前的fragment，显示下一个
+			}
+
+			from = fg1;
 			break;
 		case 2:
-			tran.replace(R.id.frag, fg2);
-			fg2.getListVideo(listVideo2);
+			// tran.replace(R.id.frag, fg2);
+			if (!fg2.isAdded()) { // 先判断是否被add过
+				transaction.hide(from).add(R.id.frag, fg2).commit(); // 隐藏当前的fragment，add下一个到Activity中
+				fg2.getListVideo(listVideo2);
+			} else {
+				transaction.hide(from).show(fg2).commit(); // 隐藏当前的fragment，显示下一个
+			}
+			from = fg2;
+
 			break;
 		case 3:
-			tran.replace(R.id.frag, fg3);
-			fg3.getListVideo(listVideo3);
+			// tran.replace(R.id.frag, fg3);
+			if (!fg3.isAdded()) { // 先判断是否被add过
+				transaction.hide(from).add(R.id.frag, fg3).commit(); // 隐藏当前的fragment，add下一个到Activity中
+				fg3.getListVideo(listVideo3);
+			} else {
+				transaction.hide(from).show(fg3).commit(); // 隐藏当前的fragment，显示下一个
+			}
+			from = fg3;
 			break;
 		case 4:
-			tran.replace(R.id.frag, fg4);
-			fg4.getListVideo(listVideo4);
+			// tran.replace(R.id.frag, fg4);
+			// switchContent(from,fg4);
+			if (!fg4.isAdded()) { // 先判断是否被add过
+				transaction.hide(from).add(R.id.frag, fg4).commit(); // 隐藏当前的fragment，add下一个到Activity中
+				fg4.getListVideo(listVideo4);
+			} else {
+				transaction.hide(from).show(fg4).commit(); // 隐藏当前的fragment，显示下一个
+			}
+			from = fg4;
 			break;
 
 		}
-
-		tran.commit();
 
 	}
 
@@ -476,8 +502,15 @@ public class VideoActivity extends FragmentActivity implements
 			}
 
 		}
+
+		FragmentManager fm = getSupportFragmentManager();
+		FragmentTransaction transaction = fm.beginTransaction();
+		transaction.replace(R.id.frag, fg1); // 替换Fragment，实现切换
+		fg1.getListVideo(listVideo1);
+		transaction.commit();
 		select(0);
-		switchFragment(1);
+		from = fg1;
+		// switchFragment(1);
 		myScrollView.setOnScrollListener(this);
 		findViewById(R.id.parent_layout).getViewTreeObserver()
 				.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
@@ -1018,7 +1051,6 @@ public class VideoActivity extends FragmentActivity implements
 			mediaPlayer.release();
 			mediaPlayer = null;
 		}
-		
 
 	}
 
@@ -1087,15 +1119,10 @@ public class VideoActivity extends FragmentActivity implements
 			return true;
 		case KeyEvent.KEYCODE_BACK:
 			if (mIsLand == true) {
+				mClick = true;
 				setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-				/**
-				 * 设置播放为非全屏
-				 */
-				ViewGroup.LayoutParams lp = ll2.getLayoutParams();
-				lp.height = 0;
-				ll2.setLayoutParams(lp);
-				display = true;
 				mIsLand = false;
+				mClickPort = false;
 
 			} else {
 				this.finish();
@@ -1160,13 +1187,19 @@ public class VideoActivity extends FragmentActivity implements
 		// title标题，印象笔记、邮箱、信息、微信、人人网和QQ空间使用
 		oks.setTitle(v.getvTitle());
 		// titleUrl是标题的网络链接，仅在人人网和QQ空间使用
-		// oks.setTitleUrl("http://sharesdk.cn");
+		oks.setTitleUrl("http://xhjs.net.cn/JiShi_APP_WS/APPDownload/AppDownload.htm");
 		// text是分享文本，所有平台都需要这个字段
 		oks.setText(v.getvTitle());
 		// imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
-		oks.setImagePath("file://android_asset/dabai.png");// 确保SDcard下面存在此张图片
+		if (!"".equals(v.getvPreviewImageURL())) {
+			oks.setImageUrl(v.getvPreviewImageURL());
+		} else {
+			oks.setImageUrl("http://xhjs.net.cn/JiShi_APP_WS/DefaultImage/nopic.png");
+		}
+		// oks.setImagePath("file://android_asset/dabai.png");//
+		// 确保SDcard下面存在此张图片
 		// url仅在微信（包括好友和朋友圈）中使用
-		oks.setUrl("www.baidu.com");
+		oks.setUrl("http://xhjs.net.cn/JiShi_APP_WS/APPDownload/AppDownload.htm");
 		// comment是我对这条分享的评论，仅在人人网和QQ空间使用
 		// oks.setComment("我是测试评论文本");
 		// site是分享此内容的网站名称，仅在QQ空间使用
@@ -1211,7 +1244,8 @@ public class VideoActivity extends FragmentActivity implements
 
 	void showViewTag() {
 		int position = mediaPlayer.getCurrentPosition();
-		Animation animation=AnimationUtils.loadAnimation(getApplicationContext(), R.anim.in_from_right);
+		Animation animation = AnimationUtils.loadAnimation(
+				getApplicationContext(), R.anim.in_from_right);
 		if (vtd != null && vtd.size() > 0) {
 
 			for (i = 0; i < vtd.size(); i++) {
@@ -1268,6 +1302,7 @@ public class VideoActivity extends FragmentActivity implements
 	private boolean mClickLand = true; // 点击进入横屏
 	private boolean mClickPort = true; // 点击进入竖屏
 	private OrientationEventListener mOrientationListener; // 屏幕方向改变监听器
+
 	private final void startListener() {
 		mOrientationListener = new OrientationEventListener(this) {
 			@Override

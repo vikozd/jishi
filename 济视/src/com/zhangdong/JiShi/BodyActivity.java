@@ -28,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class BodyActivity extends FinalActivity {
 	private Timer timer;
@@ -167,7 +168,8 @@ public class BodyActivity extends FinalActivity {
 //						if(timer!=null){
 //							stopTimer();
 //						}
-						timerTask = new TimerTask() {
+						Toast.makeText(BodyActivity.this, "暂无数据", 0).show();
+						/*timerTask = new TimerTask() {
 
 							@Override
 							public void run() {
@@ -189,7 +191,7 @@ public class BodyActivity extends FinalActivity {
 						};
 						timer=new Timer();
 
-						timer.schedule(timerTask, 0);
+						timer.schedule(timerTask, 0);*/
 
 					}else if ((x-shoulderX)*(x-shoulderX)+(y-shoulderY)*(y-shoulderY)<=radius*radius) {
 						tv_bodypart.setText(R.string.shoulder);
@@ -199,7 +201,9 @@ public class BodyActivity extends FinalActivity {
 //						if(timer!=null){
 //							stopTimer();
 //						}
-						timerTask=new TimerTask() {
+						Toast.makeText(BodyActivity.this, "暂无数据", 0).show();
+
+						/*timerTask=new TimerTask() {
 
 							@Override
 							public void run() {
@@ -221,7 +225,7 @@ public class BodyActivity extends FinalActivity {
 						};
 						timer=new Timer();
 
-						timer.schedule(timerTask, 0);
+						timer.schedule(timerTask, 0);*/
 
 					}else if ((x-forearmX)*(x-forearmX)+(y-forearmY)*(y-forearmY)<=radius*radius) {
 						tv_bodypart.setText(R.string.forearm);
@@ -231,7 +235,9 @@ public class BodyActivity extends FinalActivity {
 //						if(timer!=null){
 //							stopTimer();
 //						}
-						timerTask=new TimerTask() {
+						Toast.makeText(BodyActivity.this, "暂无数据", 0).show();
+
+						/*timerTask=new TimerTask() {
 
 							@Override
 							public void run() {
@@ -252,7 +258,7 @@ public class BodyActivity extends FinalActivity {
 						};
 						timer=new Timer();
 
-						timer.schedule(timerTask, 0);
+						timer.schedule(timerTask, 0);*/
 
 					}else if ((x-handX)*(x-handX)+(y-handY)*(y-handY)<=radius*radius) {
 						tv_bodypart.setText(R.string.hand);
@@ -262,7 +268,9 @@ public class BodyActivity extends FinalActivity {
 //						if(timer!=null){
 //							stopTimer();
 //						}
-						timerTask=new TimerTask() {
+						Toast.makeText(BodyActivity.this, "暂无数据", 0).show();
+
+						/*timerTask=new TimerTask() {
 
 							@Override
 							public void run() {
@@ -285,7 +293,7 @@ public class BodyActivity extends FinalActivity {
 						};
 						timer=new Timer();
 
-						timer.schedule(timerTask, 0);
+						timer.schedule(timerTask, 0);*/
 
 					}else if ((x-chestX)*(x-chestX)+(y-chestY)*(y-chestY)<=radius*radius) {
 						tv_bodypart.setText(R.string.chest);
@@ -295,7 +303,9 @@ public class BodyActivity extends FinalActivity {
 //						if(timer!=null){
 //							stopTimer();
 //						}
-						timerTask=new TimerTask() {
+						Toast.makeText(BodyActivity.this, "暂无数据", 0).show();
+
+						/*timerTask=new TimerTask() {
 
 							@Override
 							public void run() {
@@ -319,7 +329,7 @@ public class BodyActivity extends FinalActivity {
 						timer=new Timer();
 
 						timer.schedule(timerTask, 0);
-
+*/
 					}else if ((x-pelvicX)*(x-pelvicX)+(y-pelvicY)*(y-pelvicY)<=radius*radius) {
 						tv_bodypart.setText(R.string.pelvic);
 						tv_bodypart.setX((float) (pelvicX-radius*1.4));
@@ -328,8 +338,9 @@ public class BodyActivity extends FinalActivity {
 //						if(timer!=null){
 //							stopTimer();
 //						}
+						Toast.makeText(BodyActivity.this, "暂无数据", 0).show();
 
-						timerTask=new TimerTask() {
+						/*timerTask=new TimerTask() {
 
 							@Override
 							public void run() {
@@ -350,7 +361,7 @@ public class BodyActivity extends FinalActivity {
 						};
 						timer=new Timer();
 
-						timer.schedule(timerTask, 0);
+						timer.schedule(timerTask, 0);*/
 
 					}else if ((x-stomachX)*(x-stomachX)+(y-stomachY)*(y-stomachY)<=radius*radius) {
 						tv_bodypart.setText(R.string.stomach);
@@ -390,7 +401,9 @@ public class BodyActivity extends FinalActivity {
 //						if(timer!=null){
 //							stopTimer();
 //						}
-						timerTask=new TimerTask() {
+						Toast.makeText(BodyActivity.this, "暂无数据", 0).show();
+
+						/*timerTask=new TimerTask() {
 
 							@Override
 							public void run() {
@@ -409,7 +422,7 @@ public class BodyActivity extends FinalActivity {
 							}
 						};
 						timer=new Timer();					
-						timer.schedule(timerTask, 0);
+						timer.schedule(timerTask, 0);*/
 
 					}else if ((x-kneeX)*(x-kneeX)+(y-kneeY)*(y-kneeY)<=radius*radius) {
 						tv_bodypart.setText(R.string.knee);
@@ -419,7 +432,9 @@ public class BodyActivity extends FinalActivity {
 //						if(timer!=null){
 //							stopTimer();
 //						}
-						timerTask=new TimerTask() {
+						Toast.makeText(BodyActivity.this, "暂无数据", 0).show();
+
+						/*timerTask=new TimerTask() {
 
 							@Override
 							public void run() {
@@ -440,7 +455,7 @@ public class BodyActivity extends FinalActivity {
 						};
 						timer=new Timer();
 
-						timer.schedule(timerTask, 0);
+						timer.schedule(timerTask, 0);*/
 
 					}else if ((x-footX)*(x-footX)+(y-footY)*(y-footY)<=radius*radius) {
 						tv_bodypart.setText(R.string.foot);
@@ -450,7 +465,9 @@ public class BodyActivity extends FinalActivity {
 //						if(timer!=null){
 //							stopTimer();
 //						}
-						timerTask=new TimerTask() {
+						Toast.makeText(BodyActivity.this, "暂无数据", 0).show();
+
+						/*timerTask=new TimerTask() {
 
 							@Override
 							public void run() {
@@ -470,7 +487,7 @@ public class BodyActivity extends FinalActivity {
 						};
 						timer=new Timer();
 
-						timer.schedule(timerTask, 0);
+						timer.schedule(timerTask, 0);*/
 
 					}else {
 						tv_bodypart.setVisibility(View.GONE);
@@ -499,7 +516,7 @@ public class BodyActivity extends FinalActivity {
 			}
 		});
 
-		imageView.setOnLongClickListener(new OnLongClickListener() {		
+		/*imageView.setOnLongClickListener(new OnLongClickListener() {		
 
 			@Override
 			public boolean onLongClick(View arg0) {
@@ -574,7 +591,7 @@ public class BodyActivity extends FinalActivity {
 				}
 				return false;
 			}
-		});		
+		});	*/	
 	}
 
 	Handler handler = new Handler() {  		  
